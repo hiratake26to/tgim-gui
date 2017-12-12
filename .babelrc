@@ -1,0 +1,7 @@
+{
+  "presets": ["stage-1", "react"],
+  "plugins": [
+    "syntax-object-rest-spread",
+    "transform-react-jsx"
+  ]
+}

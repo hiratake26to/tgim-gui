@@ -1,0 +1,58 @@
+{
+  "name" : "SimplePointToPoint",
+  "channel" : {
+    "link_0" : {
+      "point": { "x": 30, "y": 50 },
+      "type" : "PointToPoint",
+      "config" : {
+        "Delay" : "2ms",
+        "DataRate" : "3Mbps"
+      }
+    },
+    "link_1" : {
+      "point": { "x": 0, "y": 0 },
+      "type" : "PointToPoint",
+      "config" : {
+        "DataRate" : "1kbps",
+        "Delay" : "1ms"
+      }
+    },
+    "link_2" : {
+      "point": { "x": 0, "y": 0 },
+      "type" : "PointToPoint",
+      "config" : {
+        "DataRate" : "1kbps",
+        "Delay" : "1ms"
+      }
+    }
+  },
+
+  "node" : {
+    "X" : {
+      "point": { "x": 130, "y": 20 },
+      "netifs" : [
+        { "connect" : "link_0", "config": {"Address": "auto"} }
+      ]
+    },
+    "Y" : {
+      "point": { "x": 0, "y": 0 },
+      "netifs" : [
+        { "connect" : "link_0", "config": {"Address": "auto"} },
+        { "connect" : "link_1", "config": {"Address": "auto"} }
+      ]
+    },
+    "Z" : {
+      "point": { "x": 0, "y": 0 },
+      "netifs" : [
+        { "connect" : "link_1", "config": {"Address": "auto"} },
+        { "connect" : "link_2", "config": {"Address": "auto"} }
+      ]
+    },
+    "W" : {
+      "point": { "x": 0, "y": 0 },
+      "netifs" : [
+        { "connect" : "link_2", "config": {"Address": "auto"} }
+      ]
+    }
+  }
+}
