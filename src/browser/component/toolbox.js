@@ -2,14 +2,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import {NodeListComponent, ChannelListComponent} from './toolbox/ListComponent'
+import {NodeListComponent, ChannelListComponent} from './toolbox/list-com'
 
-class SideBar extends React.Component {
+export default class ToolBox extends React.Component {
   constructor(prop) {
     super(prop)
 
     this.state = {
-      header: prop.header || 'HEADER'
+      header: 'ToolBox'
     }
   }
 
@@ -21,7 +21,7 @@ class SideBar extends React.Component {
 	    {this.state.header}
 	  </div>
 	  <ul className="list-unstyled components">
-	    <NodeListComponent />
+	    <NodeListComponent handleAddNode={this.props.addNode} />
 	    <ChannelListComponent />
 	  </ul>
 	</nav>
@@ -29,16 +29,4 @@ class SideBar extends React.Component {
     )
   }
 
-}
-
-export default class ToolBox extends React.Component {
-  constructor(prop) {
-    super(prop)
-  }
-
-  render() {
-    return (
-      <SideBar header={'Toolbox'}/>
-    )
-  }
 }

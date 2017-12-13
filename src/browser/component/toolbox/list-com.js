@@ -47,7 +47,7 @@ export class ChannelListComponent extends ListComponent {
     }
 
     this.handleClick = (id) => {
-      // TODO: add Channel icon to the NetCanvas
+      // TODO: add Channel icon to the NetCanvas (will be marge form NodeListComponent)
       console.log(id)
     }
 
@@ -63,19 +63,23 @@ export class NodeListComponent extends ListComponent {
       id: 'node-list-component',
       header: 'Node',
       items: [
-	{ id: 0, icon: 'img/Emu.png',         text: 'Emu (temp)'    },
-	{ id: 1, icon: 'img/Pc.png',          text: 'PC'            },
-	{ id: 2, icon: 'img/Router.png',      text: 'Router (temp)' },
-	{ id: 3, icon: 'img/StationWifi.png', text: 'STA (temp)'    },
-	{ id: 4, icon: 'img/Tap.png',         text: 'TAP (temp)'    }
-      ]
+        {id: 0, type:'EMU', icon :'img/Emu.png',         text :'Emu(temp)'    },
+        {id: 1, type:'PC',  icon :'img/Pc.png',          text :'PC'           },
+        {id: 2, type:'RT',  icon :'img/Router.png',      text :'Router(temp)' },
+        {id: 3, type:'STA', icon :'img/StationWifi.png', text :'STA(temp)'    },
+        {id: 4, type:'TAP', icon :'img/Tap.png',         text :'TAP(temp)'    }
+      ],
+      assign_name_prefix: '__default',
+      last_assign: 0
     }
 
     this.handleClick = (id) => {
-      // TODO: add Node icon to the NetCanvas
-      console.log(id)
+      // FIXME: it necessary assign unique name to a node
+      //console.log(this.state.items[id].type)
+      var name = this.state.assign_name_prefix + this.state.last_assign
+      this.state.last_assign++
+      this.props.handleAddNode(name)
     }
-
   }
 
 }
