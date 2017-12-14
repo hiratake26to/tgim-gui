@@ -1,10 +1,6 @@
 'use strict'
 import {handleActions} from 'redux-actions'
-import {
-  addNode, moveNode, assignNode,
-  addChannel, moveChannel, assignChannel,
-  addLine, delLine
-} from './action'
+import * as Act from './action'
 
 const defaultNodeProp = {
   point: { x: 100, y: 100 },
@@ -32,7 +28,7 @@ const defaultLineProp = {
 }
 
 export const reducer = handleActions({
-  [addNode]: (state, { payload: { id }}) => {
+  [Act.addNode]: (state, { payload: { id }}) => {
     return {
       ...state,
       node: {
@@ -44,7 +40,29 @@ export const reducer = handleActions({
       }
     }
   },
-  [moveNode]: (state, { payload: { id, point: [x,y] }}) => {
+  [Act.delNode]: (state, { payload: { id }}) => {
+    let deleted = []
+    Object.keys(state.line).forEach( (lkey) => {
+      const l = state.line[lkey]
+      if ( l.first.type === 'NODE' && l.first.id === id
+        || l.second.type === 'NODE' && l.second.id === id
+      ) {
+        deleted.push(lkey)
+      }
+    })
+    deleted.forEach((id) => {
+      reducer(state, Act.delLine(id))
+    })
+
+    delete state.node[id]
+    return { 
+      ...state,
+      node: {
+        ...state.node
+      }
+    }
+  },
+  [Act.moveNode]: (state, { payload: { id, point: [x,y] }}) => {
     return {
       ...state,
       node: {
@@ -59,7 +77,7 @@ export const reducer = handleActions({
       }
     }
   },
-  [assignNode]: (state, { payload: { id, prop: prop }}) => {
+  [Act.assignNode]: (state, { payload: { id, prop: prop }}) => {
     return {
       ...state,
       node: {
@@ -71,7 +89,7 @@ export const reducer = handleActions({
       }
     }
   },
-  [addChannel]: (state, { payload: { id }}) => {
+  [Act.addChannel]: (state, { payload: { id }}) => {
     return {
       ...state,
       channel: {
@@ -83,7 +101,16 @@ export const reducer = handleActions({
       }
     }
   },
-  [moveChannel]: (state, { payload: { id, point: [x,y] }}) => {
+  [Act.delChannel]: (state, { payload: { id }}) => {
+    return {
+      ...state,
+      channel: {
+        ...state.channel,
+        [id]: undefined
+      }
+    }
+  },
+  [Act.moveChannel]: (state, { payload: { id, point: [x,y] }}) => {
     return {
       ...state,
       channel: {
@@ -98,7 +125,7 @@ export const reducer = handleActions({
       }
     }
   },
-  [assignChannel]: (state, { payload: { id, prop: prop }}) => {
+  [Act.assignChannel]: (state, { payload: { id, prop: prop }}) => {
     return {
       ...state,
       channel: {
@@ -110,7 +137,7 @@ export const reducer = handleActions({
       }
     }
   },
-  [addLine]: (state, { payload: { id, first: f, second: s }}) => {
+  [Act.addLine]: (state, { payload: { id, first: f, second: s }}) => {
     return {
       ...state,
       line: {
@@ -123,9 +150,33 @@ export const reducer = handleActions({
       }
     }
   },
-  [delLine]: (state, { payload: { id }}) => {
+  [Act.delLine]: (state, { payload: { id }}) => {
     if (!state.line || !state.line[id] ) return state
     delete state.line[id]
-    return { ...state }
+    return { 
+      ...state,
+      line: {
+        ...state.line
+      }
+    }
+  },
+  [Act.showProps]: (state, { payload: { type, id }}) => {
+    return {
+      ...state,
+      editor: {
+        visible: true,
+        type: type,
+        id: id
+      }
+    }
+  },
+  [Act.hideProps]: (state) => {
+    return {
+      ...state,
+      editor: {
+        ...state.editor,
+        visible: false
+      }
+    }
   }
 }, null)

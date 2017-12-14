@@ -24,7 +24,7 @@ export default class NetNodes extends React.Component {
               node={this.props.node} channel={this.props.channel} line={this.props.line}
               handleDragend={this.props.handleMove}
               addLine={this.props.addLine} delLine={this.props.delLine}
-              handleClick={()=>{console.log('click')}}
+              showProps={this.props.showProps}
             />
           )
         }) }

@@ -36,7 +36,8 @@ const initialState = {
       }
     }
   },
-  line: {}
+  line: {},
+  editor: {}
 }
 
 export const store = createStore(reducer, initialState)

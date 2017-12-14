@@ -68,7 +68,7 @@ export default class NetNode extends React.Component {
               y: pos.y
           }
         }}
-        onClick={this.props.handleClick}
+        onClick={() => this.props.showProps('NODE', this.state.id)}
         onDragStart={(e) => {
           //this.props.addLine(this.props.id+'~', {type: 'NODE', id: this.props.id}, {type: 'NODE', id: this.props.id})
         }}

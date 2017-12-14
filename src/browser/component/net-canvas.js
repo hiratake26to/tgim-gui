@@ -23,6 +23,7 @@ export default class NetworkCanvas extends React.Component {
             node={this.props.node} channel={this.props.channel} line={this.props.line}
             handleMove={this.props.moveNode}
             addLine={this.props.addLine} delLine={this.props.delLine}
+            showProps={this.props.showProps}
           />
           <NetChannels node={this.props.node} channel={this.props.channel} line={this.props.line} handleMove={this.props.moveChannel} />
         </Layer>
