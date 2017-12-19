@@ -8,6 +8,10 @@ export class ListComponent extends React.Component {
   }
   
   render() {
+    const render_icon = (icon) => {
+      if (!icon) return false
+      return <img src={icon} />
+    }
     return (
       <div>
         <li>
@@ -18,7 +22,9 @@ export class ListComponent extends React.Component {
         <ul id={this.state.id} className="collapse list-unstyled">
           {this.state.items.map( it => 
             <li key={it.id}>
-              <a onClick={function(){this.handleClick(it.id)}.bind(this)}> <img src={it.icon} />{it.text}</a>
+              <a onClick={function(){this.handleClick(it.id)}.bind(this)}>
+                {render_icon(it.icon)} {it.text}
+              </a>
             </li>
           ) }
         </ul>
@@ -43,12 +49,16 @@ export class ChannelListComponent extends ListComponent {
 	{ id: 0, icon: 'img/Ap-Wifi.png', text: 'AP (temp)'     },
 	{ id: 1, icon: 'img/Hub.png',     text: 'Hub (temp)'    },
 	{ id: 2, icon: 'img/Switch.png',  text: 'Switch (temp)' }
-      ]
+      ],
+      assign_name_prefix: '__default',
+      last_assign: 0
     }
 
     this.handleClick = (id) => {
       // TODO: add Channel icon to the NetCanvas (will be marge form NodeListComponent)
-      console.log(id)
+      var name = this.state.assign_name_prefix + this.state.last_assign
+      this.state.last_assign++
+      this.props.handleAddChannel(name)
     }
 
   }
@@ -80,6 +90,27 @@ export class NodeListComponent extends ListComponent {
       this.state.last_assign++
       this.props.handleAddNode(name)
     }
+  }
+
+}
+
+export class ApplicationListComponent extends ListComponent {
+  constructor(prop) {
+    super(prop)
+
+    this.state = {
+      id: 'application-list-component',
+      header: 'Application',
+      items: [
+	{ id: 0, icon: '', text: 'Ping'     },
+	{ id: 1, icon: '',     text: 'BulkSend' }
+      ]
+    }
+
+    this.handleClick = (id) => {
+      console.log(id)
+    }
+
   }
 
 }

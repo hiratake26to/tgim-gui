@@ -20,10 +20,10 @@ module.exports = [
         } 
       ]
     },
-    target: "electron"
+    target: "electron-main"
   },
   {
-    entry: './src/browser/app.js',
+    entry: './src/renderer/app.js',
     output: {
       path: __dirname,
       filename: 'bundle.js'
@@ -37,6 +37,6 @@ module.exports = [
         }
       ]
     },
-    target: "node"
+    target: "electron-renderer"
   },
 ];

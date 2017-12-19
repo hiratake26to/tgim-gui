@@ -14,8 +14,6 @@ export default class NetNodes extends React.Component {
       <Group>
         { Object.keys(this.props.node).map( (key) => {
           var n = this.props.node[key]
-          //console.log(key)
-          //console.log(n)
           return (
             <NetNode
               key={key} id={key}

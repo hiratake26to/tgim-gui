@@ -2,7 +2,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import {NodeListComponent, ChannelListComponent} from './toolbox/list-com'
+import {NodeListComponent, ChannelListComponent, ApplicationListComponent} from './toolbox/list-com'
 
 export default class ToolBox extends React.Component {
   constructor(prop) {
@@ -22,7 +22,8 @@ export default class ToolBox extends React.Component {
 	  </div>
 	  <ul className="list-unstyled components">
 	    <NodeListComponent handleAddNode={this.props.addNode} />
-	    <ChannelListComponent />
+	    <ChannelListComponent handleAddChannel={this.props.addChannel}/>
+	    <ApplicationListComponent />
 	  </ul>
 	</nav>
       </div>

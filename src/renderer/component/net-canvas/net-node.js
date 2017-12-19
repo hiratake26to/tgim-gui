@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom'
 import {Image, Group} from 'react-konva'
 import {Provider} from 'react-redux'
 
-
 export default class NetNode extends React.Component {
   constructor(prop) {
     super(prop)
@@ -13,18 +12,30 @@ export default class NetNode extends React.Component {
       id: prop.id,
       x: prop.x,
       y: prop.y,
-      connect: {
-        link_0: {
-          point: { x: 30, y: 50 },
-          type: "PointToPoint",
-          config: {
-            Delay : "2ms",
-            DataRate : "3Mbps"
-          }
-        }
-      }
     }
+  }
 
+
+  line_list = []
+  last_netifs = null
+  reline = () => {
+    const {netifs} = this.props.node[this.state.id]
+    if ( JSON.stringify(netifs) === this.last_netifs ) return
+    this.last_netifs = JSON.stringify(netifs)
+
+    console.log('ReLine: ' + this.state.id)
+    //console.log(this.line_list)
+    this.line_list.map( line_name => {
+      this.props.delLine(line_name)
+    })
+    netifs.forEach( obj => {
+    //console.log('reline: '+this.props.id+'_to_'+key)
+    this.props.addLine(this.props.id+'_to_'+obj.connect,
+                        { type: 'NODE', id: this.props.id},
+                        { type: 'CHANNEL', id: obj.connect})
+    this.line_list.push(this.props.id+'_to_'+obj.connect)
+    //console.log(this.props.line)
+    })
   }
 
   componentDidMount() {
@@ -37,17 +48,9 @@ export default class NetNode extends React.Component {
         offsetY: image.height/2
       })
     }
-    this.reline = () => {
-      Object.keys(this.state.connect).forEach( key => {
-        //console.log('reline: '+this.props.id+'_to_'+key)
-        this.props.delLine(this.props.id+'_to_'+key)
-        this.props.addLine(this.props.id+'_to_'+key,
-                            { type: 'NODE', id: this.props.id},
-                            { type: 'CHANNEL', id: key})
-        //console.log(this.props.line)
-      })
-    }
-    this.reline()
+
+    // line setter
+    setInterval( this.reline, 100 )
   }
 
   render() {
@@ -68,7 +71,12 @@ export default class NetNode extends React.Component {
               y: pos.y
           }
         }}
-        onClick={() => this.props.showProps('NODE', this.state.id)}
+        onClick={ () => 
+          {
+            this.props.showProps('NODE', this.state.id)
+            //this.reline();
+          }
+        }
         onDragStart={(e) => {
           //this.props.addLine(this.props.id+'~', {type: 'NODE', id: this.props.id}, {type: 'NODE', id: this.props.id})
         }}

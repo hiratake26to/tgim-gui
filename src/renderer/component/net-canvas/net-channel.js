@@ -45,7 +45,7 @@ export default class NetChannel extends React.Component {
               y: pos.y
           }
         }}
-        onClick={this.props.handleClick}
+        onClick={() => this.props.showProps('CHANNEL', this.state.id)}
         onDragend={(e) => {
           // TODO: if out of the canvas area, it necessary to keep points within area.
           //var x = e.evt.layerX

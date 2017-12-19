@@ -20,6 +20,8 @@ export default class NetChannels extends React.Component {
               x={n.point.x} y={n.point.y}
               channel={this.props.channel}
               handleDragend={this.props.handleMove}
+
+              showProps={this.props.showProps}
             />
           )
         }) }
