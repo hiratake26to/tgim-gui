@@ -18,7 +18,9 @@ export default class NetNode extends React.Component {
 
   line_list = []
   last_netifs = null
+  interval_id = null
   reline = () => {
+    if ( !this.props.node[this.state.id] ) return
     const {netifs} = this.props.node[this.state.id]
     if ( JSON.stringify(netifs) === this.last_netifs ) return
     this.last_netifs = JSON.stringify(netifs)
@@ -28,6 +30,7 @@ export default class NetNode extends React.Component {
     this.line_list.map( line_name => {
       this.props.delLine(line_name)
     })
+    this.line_list = []
     netifs.forEach( obj => {
     //console.log('reline: '+this.props.id+'_to_'+key)
     this.props.addLine(this.props.id+'_to_'+obj.connect,
@@ -50,7 +53,11 @@ export default class NetNode extends React.Component {
     }
 
     // line setter
-    setInterval( this.reline, 100 )
+    this.interval_id = setInterval( this.reline, 100 )
+  }
+
+  componentWillUnmount() {
+    clearInterval( this.interval_id )
   }
 
   render() {

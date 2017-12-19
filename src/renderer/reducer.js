@@ -69,6 +69,23 @@ export const guiReducer = handleActions({
         visible: false
       }
     }
+  },
+
+  // ノードが消されるときに関連するライン情報も削除する
+  [Act.delNode]: (state, { payload: { id }}) => {
+    let deleted = []
+    Object.keys(state.line).forEach( (lkey) => {
+      const l = state.line[lkey]
+      if ( l.first.type === 'NODE' && l.first.id === id
+        || l.second.type === 'NODE' && l.second.id === id
+      ) {
+        deleted.push(lkey)
+      }
+    })
+    deleted.forEach((id) => {
+      guiReducer(state, Act.delLine(id))
+    })
+    return state
   }
 }, null)
 
