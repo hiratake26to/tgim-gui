@@ -22,7 +22,7 @@ class PropsEditor extends React.Component {
     if ( !visible ) {
     //this.content = <div />
     } else if ( !pr ) {
-      const m = ''+ type + ' ' + id + ' is not found in database';
+      const m = ''+ type + ' ' + id + ' is not found';
       this.content = <Exception msg={m}/>
     } else {
       if (type == 'NODE') {
