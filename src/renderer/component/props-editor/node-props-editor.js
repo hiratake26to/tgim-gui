@@ -1,30 +1,43 @@
 'use strict'
 import React, { Component } from 'react'
-import { List, Divider, Container, Message, Button, Checkbox, Form, Grid, Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
+import { Table, List, Divider, Container, Message, Button, Checkbox, Form, Grid, Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
 
-import Ask from './ask'
 import Exception from './exception'
 import BasePropsEditor from './base-props-editor'
 
 class NetIfaceForm extends Component {
+  // onDelete(this.props.id)
   render() {
     return (
       <Form.Group inline>
-        <label>connect</label>
         <Form.Input id={this.props.id} name="connect" defaultValue={this.props.connect} onChange={this.props.onChange} />
+        <Button icon onClick={() => this.props.onDelete(this.props.id)}>
+          <Icon name='delete' />
+        </Button>
       </Form.Group>
     )
   }
 }
 
 class NetIfsForm extends Component {
+  constructor(prop) {
+    super(prop)
+  }
+
   render() {
     let i = 0
-    const content = this.props.netifs.map( ({connect}) => 
-      <NetIfaceForm id={i++} connect={connect} onChange={this.props.onChange}/>
-    )
+    const content = this.props.netifs().map( ({connect}) => {
+      return (<NetIfaceForm id={i++} connect={connect} onChange={this.props.onChange} onDelete={this.props.onDelete}/>)
+    })
 
-    return content
+    return (
+      <div>
+        <label>connect</label> {content}
+        <Button icon onClick={this.props.onAdd}>
+          <Icon name='add' />
+        </Button>
+      </div>
+    )
   }
 }
 
@@ -33,38 +46,50 @@ export default class NodePropsEditor extends BasePropsEditor {
   handleDeleteClick = (e) => this.setState(
     this.props.delNode(this.props.id)
   )
-  handleAskCanncel = () => this.props.showProps('NODE', this.editted)
-  handleAskOk      = () => {
-    this.editted = this.props.id
-    delete this.pprops
-    delete this.pdanger
-    this.props.showProps('NODE', this.editted)
-  }
 
   handleSave = () => {
-    console.log('click save')
-    console.log(this.state)
+    //console.log('click save')
+    //console.log(this.state)
     this.props.assignNodeNetif(this.state.name, JSON.parse(JSON.stringify(this.state.netifs)))
   }
 
-  // dummy
-  /*
-  state = { 
-    name: 'node_0',
-    netifs: [
-      { connect: 'link_0' },
-      { connect: 'link_1' }
-    ]
+  handleIfaceAdd = () => {
+    const newArray = Object.assign([], this.state.netifs);
+    newArray.push({ connect: "" })
+    //console.log(newArray)
+    this.setState(
+      { 
+        ...this.state,
+        netifs: [ 
+          ...newArray
+        ] 
+      }
+    )
   }
-  */
+  handleIfaceDelete = (id) => {
+    //console.log('click delete: ' + id)
+    const newArray = Object.assign([], this.state.netifs);
+    newArray.splice(id, 1)
+    this.setState(
+      { 
+        ...this.state,
+        netifs: [ 
+          ...newArray
+        ] 
+      }
+    )
+  }
+
   constructor(prop) {
     super(prop)
-  }
-  state = { 
-    name: this.props.id,
-    netifs: JSON.parse(JSON.stringify(
-      this.props.node[this.props.id].netifs
-    ))
+
+    this.state = ({
+      ...this.state,
+      name: this.props.id,
+      netifs: JSON.parse(JSON.stringify(
+                this.props.node[this.props.id].netifs
+              ))
+    })
   }
 
   handleChange = (e, { name, value }) => {
@@ -77,6 +102,7 @@ export default class NodePropsEditor extends BasePropsEditor {
         }
       this.setState(
         { 
+          ...this.state,
           netifs: [ 
             ...newArray
           ] 
@@ -88,15 +114,23 @@ export default class NodePropsEditor extends BasePropsEditor {
   }
 
   renderPropsForm = () => {
-    const { name, netifs } = this.state
-
-    return (
+    this.content = (
       <Form>
         <Form.Field>
           <label>Name</label>
-          <Form.Input name="name" defaultValue={name} onChange={this.handleChange} />
+          <Form.Input name="name" defaultValue={this.state.name} onChange={this.handleChange} />
         </Form.Field>
-        <NetIfsForm netifs={netifs} onChange={this.handleChange}/>
+
+        <Divider />
+
+        <NetIfsForm 
+          netifs={()=> (this.state.netifs)}
+          onChange={this.handleChange} 
+          onDelete={this.handleIfaceDelete}
+          onAdd={this.handleIfaceAdd}
+        />
+
+        <Divider />
 
         <Button.Group fluid>
           <Button>Revert</Button>
@@ -105,5 +139,7 @@ export default class NodePropsEditor extends BasePropsEditor {
         </Button.Group>
       </Form>
     )
+
+    return this.content
   }
 }

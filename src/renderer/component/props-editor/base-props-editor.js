@@ -2,39 +2,28 @@
 import React, { Component } from 'react'
 import { List, Divider, Container, Message, Button, Checkbox, Form, Grid, Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
 
-import Ask from './ask'
 import Exception from './exception'
 
 export default class BasePropsEditor extends Component {
-  state = { activeItem: 'props' }
+  constructor(prop) {
+    super(prop)
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
-  editted = this.props.id
-  pprops = null
-  pdanger = null
+    this.state = { activeItem: 'props' }
+    this.handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+    this.pprops = null
+    this.pdanger = null
+  }
 
   render() {
     const { activeItem } = this.state
 
-    if ( !this.pprops ) {
-      this.pprops = this.renderPropsForm()
-    }
+    this.pprops = this.renderPropsForm()
 
     if ( !this.pdanger ) {
       this.pdanger = (
         <Form>
           <Button negative onClick={this.handleDeleteClick}>Delete</Button>
         </Form>
-      )
-    }
-
-    if (this.editted != this.props.id) {
-      return (
-        <Ask msg='Do you want to cancel the current change?'
-          onCanncel = {this.handleAskCanncel}
-          onOk      = {this.handleAskOk}
-        />
       )
     }
 

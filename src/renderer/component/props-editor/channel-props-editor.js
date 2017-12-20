@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import { List, Divider, Container, Message, Button, Checkbox, Form, Grid, Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
 
-import Ask from './ask'
 import Exception from './exception'
 import BasePropsEditor from './base-props-editor'
 
@@ -11,13 +10,6 @@ export default class ChannelPropsEditor extends BasePropsEditor {
   handleDeleteClick = (e) => this.setState(
     this.props.delChannel(this.props.id)
   )
-  handleAskCanncel = () => this.props.showProps('CHANNEL', this.editted)
-  handleAskOk      = () => {
-    this.editted = this.props.id
-    delete this.pprops
-    delete this.pdanger
-    this.props.showProps('CHANNEL', this.editted)
-  }
 
   renderPropsForm = () => {
     const name       = this.props.id
