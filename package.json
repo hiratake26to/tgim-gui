@@ -1,5 +1,5 @@
 {
-  "name": "electron-app",
+  "name": "tgim-gui",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -36,6 +36,6 @@
     "build": "./node_modules/.bin/webpack",
     "start": "./node_modules/.bin/electron ."
   },
-  "author": "",
-  "license": "ISC"
+  "author": "hiratake26to",
+  "license": "MIT"
 }
