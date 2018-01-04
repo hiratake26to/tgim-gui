@@ -23,7 +23,7 @@ export default class ToolBox extends React.Component {
 	  <ul className="list-unstyled components">
 	    <NodeListComponent handleAddNode={this.props.addNode} />
 	    <ChannelListComponent handleAddChannel={this.props.addChannel}/>
-	    <ApplicationListComponent />
+	    <ApplicationListComponent handleAddApp={this.props.addApp}/>
 	  </ul>
 	</nav>
       </div>

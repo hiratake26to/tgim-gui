@@ -38,6 +38,18 @@ const initialState = {
       }
     },
     "apps" : {
+      "tcp_app2" : {
+        "type": "setMyTcpApp",
+        "args": {
+          "src_host":  "X",
+          "src_port":  60000,
+          "dst_host":  "Y",
+          "dst_port":  80,
+          "sim_start": 5,
+          "sim_stop":  25,
+          "rate":      "1Mbps"
+        }
+      },
       "tcp_app" : {
         "type": "setMyTcpApp",
         "args": {

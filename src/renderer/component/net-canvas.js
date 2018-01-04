@@ -7,6 +7,7 @@ import SplitPane from 'react-split-pane'
 import NetNodes    from './net-canvas/net-nodes'
 import NetChannels from './net-canvas/net-channels'
 import NetLines    from './net-canvas/net-lines'
+import NetApps     from './net-canvas/net-apps'
 
 import { Label, Icon, Container, Divider } from 'semantic-ui-react'
 
@@ -17,7 +18,7 @@ export default class NetworkCanvas extends React.Component {
 
   render() {
     //console.log(this.props)
-    const {node, channel} = this.props.netState
+    const {node, channel, apps} = this.props.netState
     const {line} = this.props.guiState
     return (
       <div className="canvas-wrapper">
@@ -46,16 +47,7 @@ export default class NetworkCanvas extends React.Component {
       </div>
       <Divider />
       <div>
-        <Container>
-          <Label.Group color='blue'>
-            <Label as='a'>
-              Ping <Icon name='close' />
-            </Label>
-            <Label as='a'>
-              BulkSend <Icon name='close' />
-            </Label>
-          </Label.Group>
-        </Container>
+        <NetApps apps={apps} showProps={this.props.showProps}/>
       </div>
       </div>
     )

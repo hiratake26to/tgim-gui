@@ -27,6 +27,11 @@ const defaultLineProp = {
   }
 }
 
+const defaultAppProp = {
+  type: undefined,
+  args: {}
+}
+
 export const guiReducer = handleActions({
   [Act.addLine]: (state, { payload: { id, first: f, second: s }}) => {
     return {
@@ -238,6 +243,26 @@ export const netReducer = handleActions({
           ...state.channel[id],
           ...prop
         }
+      }
+    }
+  },
+  [Act.addApp]: (state, { payload: { id } }) => {
+    return {
+      ...state,
+      apps: {
+        ...state.apps,
+        [id]: {
+          ...defaultAppProp
+        }
+      }
+    }
+  },
+  [Act.delApp]: (state, { payload: { id } }) => {
+    delete state.apps[id]
+    return {
+      ...state,
+      apps: {
+        ...state.apps
       }
     }
   }

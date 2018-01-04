@@ -103,12 +103,18 @@ export class ApplicationListComponent extends ListComponent {
       header: 'Application',
       items: [
 	{ id: 0, icon: '', text: 'Ping'     },
-	{ id: 1, icon: '',     text: 'BulkSend' }
-      ]
+	{ id: 1, icon: '', text: 'BulkSend' }
+      ],
+      assign_name_prefix: '__default',
+      last_assign: 0
     }
 
     this.handleClick = (id) => {
+      // FIXME
       console.log(id)
+      var name = this.state.assign_name_prefix + this.state.last_assign
+      this.state.last_assign++
+      this.props.handleAddApp(name)
     }
 
   }

@@ -9,5 +9,6 @@ import BasePropsEditor from './base-props-editor'
 
 import NodePropsEditor from './node-props-editor'
 import ChannelPropsEditor from './channel-props-editor'
+import AppPropsEditor from './app-props-editor'
 
-export { Ask, Exception, BasePropsEditor, NodePropsEditor, ChannelPropsEditor }
+export { Ask, Exception, BasePropsEditor, NodePropsEditor, ChannelPropsEditor, AppPropsEditor }
