@@ -10,11 +10,11 @@ Format
 
 ```json
 {
-  "name": "<application name>"
-  "type": "<application type>"
+  "name": "<application name>",
+  "type": "<application type>",
   "args": {
     "<name>": "<default value>",
-    ...
+    "...": "..."
   }
 }
 ```
@@ -31,7 +31,7 @@ This filename is `ping.json`
 
 ```json
 {
-  "type": "myPing"
+  "type": "myPing",
   "args": {
     "shost": "", 
     "sport": 60000,
