@@ -22,7 +22,7 @@ export class ListComponent extends React.Component {
         <ul id={this.state.id} className="collapse list-unstyled">
           {this.state.items.map( it => 
             <li key={it.id}>
-              <a onClick={function(){this.handleClick(it.id)}.bind(this)}>
+              <a onClick={function(){this.handleClick(it)}.bind(this)}>
                 {render_icon(it.icon)} {it.text}
               </a>
             </li>
@@ -54,7 +54,7 @@ export class ChannelListComponent extends ListComponent {
       last_assign: 0
     }
 
-    this.handleClick = (id) => {
+    this.handleClick = (e) => {
       // TODO: add Channel icon to the NetCanvas (will be marge form NodeListComponent)
       var name = this.state.assign_name_prefix + this.state.last_assign
       this.state.last_assign++
@@ -83,9 +83,9 @@ export class NodeListComponent extends ListComponent {
       last_assign: 0
     }
 
-    this.handleClick = (id) => {
+    this.handleClick = (e) => {
       // FIXME: it necessary assign unique name to a node
-      //console.log(this.state.items[id].type)
+      //console.log(this.state.items[e.id].type)
       var name = this.state.assign_name_prefix + this.state.last_assign
       this.state.last_assign++
       this.props.handleAddNode(name)
@@ -94,27 +94,43 @@ export class NodeListComponent extends ListComponent {
 
 }
 
+import * as ModelLoader from '../../../model/loader'
+
 export class ApplicationListComponent extends ListComponent {
   constructor(prop) {
     super(prop)
 
+    const app_models = ModelLoader.list('application')
+    const items = app_models
+      .map( fname => ModelLoader.load('application', fname))
+      .map( model => ( {
+            id: model.type,
+            type: model.type,
+            icon: '',
+            text: model.name 
+          }))
+    /*
+      const items = [
+	{ id: 0, type: 'ping', icon: '', text: 'Ping'     },
+	{ id: 1, type: '...', icon: '', text: 'BulkSend' }
+      ]
+    */
+    console.log(items)
+
     this.state = {
       id: 'application-list-component',
       header: 'Application',
-      items: [
-	{ id: 0, icon: '', text: 'Ping'     },
-	{ id: 1, icon: '', text: 'BulkSend' }
-      ],
+      items: items,
       assign_name_prefix: '__default',
       last_assign: 0
     }
 
-    this.handleClick = (id) => {
+    this.handleClick = (e) => {
       // FIXME
-      console.log(id)
+      console.log(e)
       var name = this.state.assign_name_prefix + this.state.last_assign
       this.state.last_assign++
-      this.props.handleAddApp(name)
+      this.props.handleAddApp(name, e.type )
     }
 
   }

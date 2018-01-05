@@ -18,8 +18,8 @@ export const moveChannel   = createAction('MOVE_CHANNEL',   (id, x, y) => ({ id:
 export const assignChannel = createAction('ASSIGN_CHANNEL', (id, prop) => ({ id: id, prop:prop }))
 
 // App
-export const addApp = createAction('ADD_APP', (id) => ({ id: id }))
-export const delApp = createAction('DEL_APP', (id) => ({ id: id }))
+export const addApp = createAction('ADD_APP', (id, type) => ({ id: id, type: type }))
+export const delApp = createAction('DEL_APP', (id)       => ({ id: id }))
 
 // Line
 export const addLine = createAction('ADD_LINE', (id, first, second) => ({ id: id, first: first, second: second}))

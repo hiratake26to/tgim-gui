@@ -1,6 +1,7 @@
 'use strict'
 import {handleActions} from 'redux-actions'
 import * as Act from './action'
+import * as ModelLoader from '../model/loader'
 
 const defaultNodeProp = {
   point: { x: 100, y: 100 },
@@ -246,13 +247,15 @@ export const netReducer = handleActions({
       }
     }
   },
-  [Act.addApp]: (state, { payload: { id } }) => {
+  [Act.addApp]: (state, { payload: { id, type } }) => {
+    // load application model
+    const app_prop = ModelLoader.load('application', type)
     return {
       ...state,
       apps: {
         ...state.apps,
         [id]: {
-          ...defaultAppProp
+          ...app_prop
         }
       }
     }
