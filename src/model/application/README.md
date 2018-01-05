@@ -31,6 +31,7 @@ This filename is `ping.json`
 
 ```json
 {
+  "name": "Ping",
   "type": "myPing",
   "args": {
     "shost": "", 
