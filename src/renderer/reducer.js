@@ -249,7 +249,7 @@ export const netReducer = handleActions({
   },
   [Act.addApp]: (state, { payload: { id, type } }) => {
     // load application model
-    const app_prop = ModelLoader.load('application', type)
+    const app_prop = ModelLoader.loadFromType('application', type)
     return {
       ...state,
       apps: {

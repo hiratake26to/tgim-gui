@@ -8,6 +8,15 @@ export function load(dir, name) {
   return JSON.parse( fs.readFileSync( path.join( model_dir, dir, name + '.json')))
 }
 
+export function loadFromType(dir, type) {
+  return(
+  list(dir)
+    .map( fname => load(dir, fname) )
+    .filter( model => (model.type === type) )
+    [0]
+  )
+}
+
 export function list(dir) {
   return (
     fs
