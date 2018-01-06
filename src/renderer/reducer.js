@@ -3,6 +3,16 @@ import {handleActions} from 'redux-actions'
 import * as Act from './action'
 import * as ModelLoader from '../model/loader'
 
+const defaultNetState = {
+  node: {},
+  channel: {},
+  apps : {}
+}
+const defaultGuiState = {
+  line: {},
+  editor: {}
+}
+
 const defaultNodeProp = {
   point: { x: 100, y: 100 },
   netifs: []
@@ -34,6 +44,10 @@ const defaultAppProp = {
 }
 
 export const guiReducer = handleActions({
+  [Act.initAllState]: (state) => {
+    return defaultGuiState
+  },
+
   [Act.addLine]: (state, { payload: { id, first: f, second: s }}) => {
     return {
       ...state,
@@ -96,6 +110,15 @@ export const guiReducer = handleActions({
 }, null)
 
 export const netReducer = handleActions({
+  [Act.initAllState]: (state) => {
+    return defaultNetState
+  },
+  [Act.setNetState]: (state, { payload: newState }) => {
+    console.log('set new state of net!')
+    console.log(newState)
+    return newState
+  },
+
   [Act.addNode]: (state, { payload: { id }}) => {
     return {
       ...state,

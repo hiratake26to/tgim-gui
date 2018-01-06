@@ -1,6 +1,10 @@
 'use strict'
 import {createAction} from 'redux-actions'
 
+// used when loaded data from file
+export const initAllState = createAction('INIT_All_STATE')
+export const setNetState = createAction('SET_NET_STATE', (newState) => (newState))
+
 // Node
 export const addNode         = createAction('ADD_NODE',          (id)         => ({ id: id }))
 export const delNode         = createAction('DEL_NODE',          (id)         => ({ id: id }))

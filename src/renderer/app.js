@@ -6,8 +6,8 @@ import {store} from './store'
 import {VisibleToolBox} from './container/VisibleToolBox'
 import {VisibleNetwork} from './container/VisibleNetwork'
 import {VisiblePropsEditor} from './container/VisiblePropsEditor'
+import {VisibleMenu} from './container/VisibleMenu'
 import SplitPane from 'react-split-pane'
-import AppMenu from './menu.js'
 
 
 class App extends React.Component {
@@ -15,7 +15,7 @@ class App extends React.Component {
     return (
       <SplitPane split="vertical">
       <div>
-        <AppMenu />
+        <VisibleMenu />
       </div>
       <div className="wrapper">
         <VisibleToolBox />
