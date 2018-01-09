@@ -85,8 +85,8 @@ export const netReducer = handleActions({
     console.log('set new state of net!')
     console.log(newState)
     return {
-      ...defaultNetState,
-      newState
+      ...state,
+      ...newState
     }
   },
 
