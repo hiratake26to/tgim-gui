@@ -2,46 +2,14 @@
 import {handleActions} from 'redux-actions'
 import * as Act from './action'
 import * as ModelLoader from '../model/loader'
-
-const defaultNetState = {
-  node: {},
-  channel: {},
-  apps : {}
-}
-const defaultGuiState = {
-  line: {},
-  editor: {}
-}
-
-const defaultNodeProp = {
-  point: { x: 100, y: 100 },
-  netifs: []
-}
-
-const defaultChannelProp = {
-  point: { x: 50, y: 50 },
-  type: "PointToPoint",
-  config: {
-    Delay : "1ms",
-    DataRate : "100Mbps"
-  }
-}
-
-const defaultLineProp = {
-  first: {
-    type: undefined, // 'NODE' or 'CHANNEL'
-    id: undefined
-  },
-  second: {
-    type: undefined,
-    id: undefined
-  }
-}
-
-const defaultAppProp = {
-  type: undefined,
-  args: {}
-}
+import {
+  defaultNetState,
+  defaultGuiState,
+  defaultNodeProp,
+  defaultChannelProp,
+  defaultLineProp,
+  defaultAppProp
+} from './default-states'
 
 export const guiReducer = handleActions({
   [Act.initAllState]: (state) => {
@@ -116,7 +84,10 @@ export const netReducer = handleActions({
   [Act.setNetState]: (state, { payload: newState }) => {
     console.log('set new state of net!')
     console.log(newState)
-    return newState
+    return {
+      ...defaultNetState,
+      newState
+    }
   },
 
   [Act.addNode]: (state, { payload: { id }}) => {
