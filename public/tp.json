@@ -3,7 +3,7 @@
   "channel" : {
     "link_0" : {
       "point": { "x": 30, "y": 50 },
-      "type" : "PointToPoint",
+      "type" : "Csma",
       "config" : {
         "Delay" : "2ms",
         "DataRate" : "3Mbps"
@@ -11,7 +11,7 @@
     },
     "link_1" : {
       "point": { "x": 0, "y": 0 },
-      "type" : "PointToPoint",
+      "type" : "Csma",
       "config" : {
         "DataRate" : "1kbps",
         "Delay" : "1ms"
@@ -19,7 +19,7 @@
     },
     "link_2" : {
       "point": { "x": 0, "y": 0 },
-      "type" : "PointToPoint",
+      "type" : "Csma",
       "config" : {
         "DataRate" : "1kbps",
         "Delay" : "1ms"

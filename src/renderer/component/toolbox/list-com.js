@@ -50,7 +50,7 @@ export class ChannelListComponent extends ListComponent {
 	{ id: 1, icon: 'img/Hub.png',     text: 'Hub (temp)'    },
 	{ id: 2, icon: 'img/Switch.png',  text: 'Switch (temp)' }
       ],
-      assign_name_prefix: '__default',
+      assign_name_prefix: '__ch_default',
       last_assign: 0
     }
 
@@ -79,7 +79,7 @@ export class NodeListComponent extends ListComponent {
         {id: 3, type:'STA', icon :'img/StationWifi.png', text :'STA(temp)'    },
         {id: 4, type:'TAP', icon :'img/Tap.png',         text :'TAP(temp)'    }
       ],
-      assign_name_prefix: '__default',
+      assign_name_prefix: '__node_default',
       last_assign: 0
     }
 
@@ -121,7 +121,7 @@ export class ApplicationListComponent extends ListComponent {
       id: 'application-list-component',
       header: 'Application',
       items: items,
-      assign_name_prefix: '__default',
+      assign_name_prefix: '__app_default',
       last_assign: 0
     }
 

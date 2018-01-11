@@ -48,7 +48,7 @@ class AppMenu extends React.Component {
       properties: ['openDirectory']
     })
 
-    if ( !save_dir[0] ) return
+    if ( !save_dir || !save_dir[0] ) return
     save_dir = path.join(save_dir[0], '/')
 
     // generate temporary file
@@ -86,8 +86,8 @@ class AppMenu extends React.Component {
     gen_cpro.stderr.on('data', (data) => {console.log(''+data)})
     gen_cpro.on('close', (code) => {
       console.log(`generator process exited with code ${code}`);
-      // remove temporary file
-      fs.unlinkSync(temp_path)
+      // if success: remove temporary file
+      if (code === 0) fs.unlinkSync(temp_path)
     })
   }
 
@@ -100,10 +100,10 @@ class AppMenu extends React.Component {
               <Dropdown.Item onClick={this.onNew}>New</Dropdown.Item>
               <Dropdown.Item onClick={this.onOpen}>Open</Dropdown.Item>
               <Dropdown.Item onClick={this.onSave}>Save</Dropdown.Item>
-              <Dropdown.Item onClick={this.onGen}>Generate ns3 code</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Header>Export</Dropdown.Header>
-              <Dropdown.Item>Share</Dropdown.Item>
+              <Dropdown.Item onClick={this.onGen}>Generate ns3 code</Dropdown.Item>
+              <Dropdown.Item>Save as picture</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Menu>

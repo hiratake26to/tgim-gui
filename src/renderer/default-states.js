@@ -19,7 +19,8 @@ export const defaultNodeProp = {
 
 export const defaultChannelProp = {
   point: { x: 50, y: 50 },
-  type: "PointToPoint",
+  //type: "PointToPoint",
+  type: "Csma",
   config: {
     Delay : "1ms",
     DataRate : "100Mbps"
