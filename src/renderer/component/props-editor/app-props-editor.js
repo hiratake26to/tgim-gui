@@ -14,6 +14,7 @@ export default class AppPropsEditor extends BasePropsEditor {
   handleSave = () => {
     console.log('click save')
     console.log(this.state)
+    this.props.assignApp(this.props.id, this.state)
   }
 
   constructor(prop) {
@@ -40,8 +41,8 @@ export default class AppPropsEditor extends BasePropsEditor {
   }
 
   renderPropsForm = () => {
-    console.log('app props render')
-    console.log(this.state)
+    //console.log('app props render')
+    //console.log(this.state)
     this.content = (
       <Form>
         <Form.Field>

@@ -262,5 +262,17 @@ export const netReducer = handleActions({
         ...state.apps
       }
     }
+  },
+  [Act.assignApp]: (state, { payload: { id, prop } }) => {
+    return {
+      ...state,
+      apps: {
+        ...state.apps,
+        [id]: {
+          ...state.apps[id],
+          ...prop
+        }
+      }
+    }
   }
 }, null)
