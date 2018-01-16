@@ -12,6 +12,8 @@ export default class NetLine extends React.Component {
       switch (obj.type) {
         case 'NODE':
           return this.props.node[obj.id].point
+        case 'SUBNET':
+          return this.props.subnet[obj.id].point
         case 'CHANNEL':
           if ( !this.props.channel[obj.id] ) return {x: 0, y: 0}
           return this.props.channel[obj.id].point

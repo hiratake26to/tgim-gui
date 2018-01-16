@@ -15,6 +15,16 @@ export const addNodeNetif    = createAction('ADD_NODE_NETIF',    (id, prop)   =>
 export const delNodeNetif    = createAction('DEL_NODE_NETIF',    (id, index)  => ({ id: id, index:index }) ) // not usually
 export const assignNodeNetif = createAction('ASSIGN_NODE_NETIF', (id, netifs) => ({ id: id, netifs: netifs }) )
 
+// Subnet
+export const addSubnet         = createAction('ADD_SUBNET',          (id)         => ({ id: id }))
+export const delSubnet         = createAction('DEL_SUBNET',          (id)         => ({ id: id }))
+export const moveSubnet        = createAction('MOVE_SUBNET',         (id, x, y)   => ({ id: id, point: [x,y] }))
+export const assignSubnet      = createAction('ASSIGN_SUBNET',       (id, prop)   => ({ id: id, prop:prop }) )
+// netif
+export const addSubnetNetif    = createAction('ADD_SUBNET_NETIF',    (id, prop)   => ({ id: id, prop:prop }) )    // not usually
+export const delSubnetNetif    = createAction('DEL_SUBNET_NETIF',    (id, index)  => ({ id: id, index:index }) ) // not usually
+export const assignSubnetNetif = createAction('ASSIGN_SUBNET_NETIF', (id, netifs) => ({ id: id, netifs: netifs }) )
+
 // Channel
 export const addChannel    = createAction('ADD_CHANNEL',    (id)       => ({ id: id }))
 export const delChannel    = createAction('DEL_CHANNEL',    (id)       => ({ id: id }))

@@ -1,0 +1,111 @@
+{
+  "name": "ParentNet",
+  "node": {
+    "X": {
+      "point": {
+        "x": 246,
+        "y": 98
+      },
+      "netifs": [
+        {
+          "connect": "link_0"
+        },
+        {
+          "connect": "link_1"
+        }
+      ]
+    },
+    "Y": {
+      "point": {
+        "x": 304,
+        "y": 188
+      },
+      "netifs": [
+        {
+          "connect": "link_0"
+        }
+      ]
+    },
+    "Z": {
+      "point": {
+        "x": 330,
+        "y": 343
+      },
+      "netifs": [
+        {
+          "connect": "link_0"
+        }
+      ]
+    }
+  },
+  "subnet": {
+    "subnet_0": {
+      "point": {
+        "x": 54,
+        "y": 177
+      },
+      "load": "./local/Subnet0.json",
+      "netifs": [
+        {
+          "up": "gateway",
+          "connect": "link_0"
+        },
+        {
+          "connect": "link_1",
+          "up": "gateway"
+        }
+      ]
+    },
+    "subnet_1": {
+      "point": {
+        "x": 81,
+        "y": 420
+      },
+      "load": "./local/Subnet1.json",
+      "netifs": [
+        {
+          "up": "gateway",
+          "connect": "link_0"
+        }
+      ]
+    }
+  },
+  "channel": {
+    "link_0": {
+      "point": {
+        "x": 182,
+        "y": 256
+      },
+      "type": "PointToPoint",
+      "config": {
+        "Delay": "2ms",
+        "DataRate": "3Mbps"
+      }
+    },
+    "link_1": {
+      "point": {
+        "x": 141,
+        "y": 117
+      },
+      "type": "Csma",
+      "config": {
+        "Delay": "1ms",
+        "DataRate": "100Mbps"
+      }
+    }
+  },
+  "apps": {
+    "tcp_app2": {
+      "type": "ping",
+      "args": {
+        "shost": "${X}", 
+        "sport": 60000,
+        "dhost": "${Y}",
+        "dport": 8080,
+        "start": 1,
+        "stop": 10,
+        "rate": "1Mbps"
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 'use strict'
 import React from 'react'
 import { List, Divider, Container, Message, Button, Checkbox, Form, Grid, Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
-import { Ask, NodePropsEditor, ChannelPropsEditor, AppPropsEditor, Exception } from './props-editor/utils'
+import { Ask, NodePropsEditor, SubnetPropsEditor, ChannelPropsEditor, AppPropsEditor, Exception } from './props-editor/utils'
 
 class AskSwitchTarget extends React.Component {
   render() {
@@ -27,6 +27,8 @@ class PropsEditor extends React.Component {
     const pr = (() => {switch( type ) {
       case 'NODE': 
         return this.props.netState.node[id]
+      case 'SUBNET': 
+        return this.props.netState.subnet[id]
       case 'CHANNEL': 
         return this.props.netState.channel[id]
       case 'APP': 
@@ -46,6 +48,9 @@ class PropsEditor extends React.Component {
       if (type == 'NODE') {
         //this.setState( { content: <NodePropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} /> })
         this.content = <NodePropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} />
+      } else if (type == 'SUBNET') {
+        //this.setState( { content: <SubnetPropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} /> })
+        this.content = <SubnetPropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} />
       } else if (type == 'CHANNEL') {
         //this.setState( { content: <ChannelPropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} /> })
         this.content = <ChannelPropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} />

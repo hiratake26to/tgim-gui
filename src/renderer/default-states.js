@@ -3,6 +3,7 @@
 export const defaultNetState = {
   name: 'initialNet',
   node: {},
+  subnet: {},
   channel: {},
   apps : {}
 }
@@ -14,6 +15,11 @@ export const defaultGuiState = {
 
 export const defaultNodeProp = {
   point: { x: 100, y: 100 },
+  netifs: []
+}
+export const defaultSubnetProp = {
+  point: { x: 100, y: 100 },
+  load: undefined,
   netifs: []
 }
 
@@ -55,6 +61,7 @@ export const initialState = {
 /*
 export const initialState = {
   netState: {
+    name: "example_net",
     node: {
       X: {
         point: { x: 130, y: 50 },
@@ -83,6 +90,22 @@ export const initialState = {
           Delay : "2ms",
           DataRate : "3Mbps"
         }
+      }
+    },
+    "subnet" : {
+      "subnet_0" : {
+        point: { x: 100, y: 100 },
+        "load" : "./local/subnet0.json",
+        "netifs" : [
+          { "up" : "gateway", "connect" : "link_0" }
+        ]
+      },
+      "subnet_1" : {
+        point: { x: 100, y: 100 },
+        "load" : "./local/subnet1.json",
+        "netifs" : [
+          { "up" : "gateway", "connect" : "link_0" }
+        ]
       }
     },
     "apps" : {

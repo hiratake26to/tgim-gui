@@ -6,6 +6,7 @@ import {
   defaultNetState,
   defaultGuiState,
   defaultNodeProp,
+  defaultSubnetProp,
   defaultChannelProp,
   defaultLineProp,
   defaultAppProp
@@ -74,6 +75,22 @@ export const guiReducer = handleActions({
       guiReducer(state, Act.delLine(id))
     })
     return state
+  },
+  // Subnetが消されるときに関連するライン情報も削除する
+  [Act.delSubnet]: (state, { payload: { id }}) => {
+    let deleted = []
+    Object.keys(state.line).forEach( (lkey) => {
+      const l = state.line[lkey]
+      if ( l.first.type === 'SUBNET' && l.first.id === id
+        || l.second.type === 'SUBNET' && l.second.id === id
+      ) {
+        deleted.push(lkey)
+      }
+    })
+    deleted.forEach((id) => {
+      guiReducer(state, Act.delLine(id))
+    })
+    return state
   }
 }, null)
 
@@ -103,21 +120,6 @@ export const netReducer = handleActions({
     }
   },
   [Act.delNode]: (state, { payload: { id }}) => {
-    /*
-    let deleted = []
-    Object.keys(state.line).forEach( (lkey) => {
-      const l = state.line[lkey]
-      if ( l.first.type === 'NODE' && l.first.id === id
-        || l.second.type === 'NODE' && l.second.id === id
-      ) {
-        deleted.push(lkey)
-      }
-    })
-    deleted.forEach((id) => {
-      reducer(state, Act.delLine(id))
-    })
-    */
-
     delete state.node[id]
     return { 
       ...state,
@@ -193,6 +195,96 @@ export const netReducer = handleActions({
       }
     }
   },
+
+  [Act.addSubnet]: (state, { payload: { id }}) => {
+    return {
+      ...state,
+      subnet: {
+        ...state.subnet,
+        [id]: {
+          ...state.subnet[id],
+          ...defaultSubnetProp
+        }
+      }
+    }
+  },
+  [Act.delSubnet]: (state, { payload: { id }}) => {
+    delete state.subnet[id]
+    return { 
+      ...state,
+      subnet: {
+        ...state.subnet
+      }
+    }
+  },
+  [Act.moveSubnet]: (state, { payload: { id, point: [x,y] }}) => {
+    return {
+      ...state,
+      subnet: {
+        ...state.subnet,
+        [id]: {
+          ...state.subnet[id],
+          point: {
+            x: x,
+            y: y
+          }
+        }
+      }
+    }
+  },
+  [Act.assignSubnet]: (state, { payload: { id, prop: prop }}) => {
+    return {
+      ...state,
+      subnet: {
+        ...state.subnet,
+        [id]: {
+          ...state.subnet[id],
+          ...prop
+        }
+      }
+    }
+  },
+  [Act.addSubnetNetif]: (state, { payload: { id, prop }}) => {
+    netifs = state.subnet.netifs
+    netifs.push(prop)
+    return {
+      ...state,
+      subnet: {
+        ...state.subnet,
+        [id]: {
+          ...state.subnet[id],
+          netifs
+        }
+      }
+    }
+  },
+  [Act.delSubnetNetif]: (state, { payload: { id, index }}) => {
+    netifs = state.subnet.netifs
+    netifs.splice(index, 1)
+    return {
+      ...state,
+      subnet: {
+        ...state.subnet,
+        [id]: {
+          ...state.subnet[id],
+          netifs
+        }
+      }
+    }
+  },
+  [Act.assignSubnetNetif]: (state, { payload: { id, netifs }}) => {
+    return {
+      ...state,
+      subnet: {
+        ...state.subnet,
+        [id]: {
+          ...state.subnet[id],
+          netifs: netifs
+        }
+      }
+    }
+  },
+
   [Act.addChannel]: (state, { payload: { id }}) => {
     return {
       ...state,

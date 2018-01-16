@@ -73,11 +73,14 @@ export class NodeListComponent extends ListComponent {
       id: 'node-list-component',
       header: 'Node',
       items: [
-        {id: 0, type:'EMU', icon :'img/Emu.png',         text :'Emu(temp)'    },
-        {id: 1, type:'PC',  icon :'img/Pc.png',          text :'PC'           },
-        {id: 2, type:'RT',  icon :'img/Router.png',      text :'Router(temp)' },
-        {id: 3, type:'STA', icon :'img/StationWifi.png', text :'STA(temp)'    },
-        {id: 4, type:'TAP', icon :'img/Tap.png',         text :'TAP(temp)'    }
+        {id: 0, type:'NODE',   icon: 'img/Pc.png',          text: 'PC'           },
+        {id: 1, type:'SUBNET', icon: 'img/icon/subnet.png', text: 'Subnet'       },
+        /*
+        {id: 2, type:'EMU',    icon: 'img/Emu.png',         text: 'Emu(temp)'    },
+        {id: 3, type:'RT',     icon: 'img/Router.png',      text: 'Router(temp)' },
+        {id: 4, type:'STA',    icon: 'img/StationWifi.png', text: 'STA(temp)'    },
+        {id: 5, type:'TAP',    icon: 'img/Tap.png',         text: 'TAP(temp)'    }
+        */
       ],
       assign_name_prefix: '__node_default',
       last_assign: 0
@@ -86,9 +89,10 @@ export class NodeListComponent extends ListComponent {
     this.handleClick = (e) => {
       // FIXME: it necessary assign unique name to a node
       //console.log(this.state.items[e.id].type)
-      var name = this.state.assign_name_prefix + this.state.last_assign
+      const name = this.state.assign_name_prefix + this.state.last_assign
+      const type = this.state.items[e.id].type
       this.state.last_assign++
-      this.props.handleAddNode(name)
+      this.props.handleAdd(type, name)
     }
   }
 

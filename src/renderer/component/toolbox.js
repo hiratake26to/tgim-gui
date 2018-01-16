@@ -13,6 +13,14 @@ export default class ToolBox extends React.Component {
     }
   }
 
+  onAddNode = (type, name) => {
+    if (type === 'NODE') {
+      this.props.addNode(name)
+    } else if (type === 'SUBNET') {
+      this.props.addSubnet(name)
+    }
+  }
+
   render() {
     return (
       <div>
@@ -21,7 +29,7 @@ export default class ToolBox extends React.Component {
 	    {this.state.header}
 	  </div>
 	  <ul className="list-unstyled components">
-	    <NodeListComponent handleAddNode={this.props.addNode} />
+	    <NodeListComponent handleAdd={this.onAddNode} />
 	    <ChannelListComponent handleAddChannel={this.props.addChannel}/>
 	    <ApplicationListComponent handleAddApp={this.props.addApp}/>
 	  </ul>

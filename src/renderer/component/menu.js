@@ -52,7 +52,7 @@ class AppMenu extends React.Component {
     save_dir = path.join(save_dir[0], '/')
 
     // generate temporary file
-    const temp_path = './tgim-gui.onGen.temporary.json'
+    const temp_path = './temp/' + this.props.netState.name + '.json'
     if ( fs.existsSync(temp_path) ) {
       const ret = remote.dialog.showMessageBox({
         type:    'warning',
