@@ -19,7 +19,7 @@ export class ListComponent extends React.Component {
             {this.state.header}
           </a>
         </li>
-        <ul id={this.state.id} className="collapse list-unstyled">
+        <ul id={this.state.id} className="list-unstyled collapse in">
           {this.state.items.map( it => 
             <li key={it.id}>
               <a onClick={function(){this.handleClick(it)}.bind(this)}>
@@ -73,8 +73,8 @@ export class NodeListComponent extends ListComponent {
       id: 'node-list-component',
       header: 'Node',
       items: [
-        {id: 0, type:'NODE',   icon: 'img/Pc.png',          text: 'PC'           },
-        {id: 1, type:'SUBNET', icon: 'img/icon/subnet.png', text: 'Subnet'       },
+        {id: 0, type:'NODE',   icon: 'img/Pc.png',          text: 'Basic' },
+        {id: 1, type:'SUBNET', icon: 'img/icon/subnet.png', text: 'Subnet'     },
         /*
         {id: 2, type:'EMU',    icon: 'img/Emu.png',         text: 'Emu(temp)'    },
         {id: 3, type:'RT',     icon: 'img/Router.png',      text: 'Router(temp)' },

@@ -13,6 +13,13 @@
   align-items: stratch;
 }
 
+.canvas-wrapper {
+  height: 100vh;
+  width: 100vh;
+  overflow: auto;
+  flex-grow: 1;
+}
+
 #axisCanvasRapper {
   margin: 30px auto;
   text-align: center;
@@ -29,9 +36,10 @@
 }
 
 #sidebar {
-  min-width: 250px;
-  max-width: 250px;
-  min-height: 100vh;
+  min-width: 200px;
+  max-width: 200px;
+  height: 100vh;
+  overflow: auto;
 }
 
 a[data-toggle="collapse"] {
