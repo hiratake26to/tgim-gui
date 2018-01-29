@@ -30,7 +30,8 @@
     "redux-actions": "2.2.1",
     "redux-devtools": "3.4.1",
     "semantic-ui-react": "0.77.1",
-    "webpack": "3.9.1"
+    "webpack": "3.10.0",
+    "yargs": "11.0.0"
   },
   "scripts": {
     "build": "./node_modules/.bin/webpack",
