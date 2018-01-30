@@ -17,7 +17,7 @@ export default class NetChannel extends React.Component {
 
   componentDidMount() {
     const image = new window.Image()
-    image.src = 'img/Hub.png'
+    image.src = 'assets/img/Hub.png'
     image.onload = () => {
       this.setState({
         image: image,

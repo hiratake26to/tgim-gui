@@ -2,10 +2,13 @@
 import path from 'path'
 import * as fs   from 'fs'
 
-const model_dir = './src/model/'
+const model_dir = './model/'
 
-export function load(dir, name) {
-  return JSON.parse( fs.readFileSync( path.join( model_dir, dir, name + '.json')))
+export function load(basename, name) {
+  return (
+    JSON.parse(fs.readFileSync(path.join( model_dir, basename + '.json')))
+      .filter( obj => (obj.name === name) )[0]
+  )
 }
 
 export function loadFromType(dir, type) {
@@ -17,11 +20,9 @@ export function loadFromType(dir, type) {
   )
 }
 
-export function list(dir) {
+export function list(basename) {
   return (
-    fs
-      .readdirSync(path.join( model_dir, dir))
-      .filter( fname => (path.extname(fname) === '.json') )
-      .map( fname => path.basename(fname, '.json') )
+    JSON.parse(fs.readFileSync(path.join( model_dir, basename + '.json')))
+      .map( obj => obj.name )
   )
 }

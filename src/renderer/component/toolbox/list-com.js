@@ -46,9 +46,9 @@ export class ChannelListComponent extends ListComponent {
       id: 'channel-list-component',
       header: 'Channel',
       items: [
-	{ id: 0, icon: 'img/Ap-Wifi.png', text: 'AP (temp)'     },
-	{ id: 1, icon: 'img/Hub.png',     text: 'Hub (temp)'    },
-	{ id: 2, icon: 'img/Switch.png',  text: 'Switch (temp)' }
+        { id: 0, icon: 'assets/img/Ap-Wifi.png', text: 'AP (temp)'     },
+	{ id: 1, icon: 'assets/img/Hub.png',     text: 'Hub (temp)'    },
+	{ id: 2, icon: 'assets/img/Switch.png',  text: 'Switch (temp)' }
       ],
       assign_name_prefix: '__ch_default',
       last_assign: 0
@@ -73,13 +73,13 @@ export class NodeListComponent extends ListComponent {
       id: 'node-list-component',
       header: 'Node',
       items: [
-        {id: 0, type:'NODE',   icon: 'img/Pc.png',          text: 'Basic' },
-        {id: 1, type:'SUBNET', icon: 'img/icon/subnet.png', text: 'Subnet'     },
+        {id: 0, type:'NODE',   icon: 'assets/img/Pc.png',          text: 'Basic' },
+        {id: 1, type:'SUBNET', icon: 'assets/img/icon/subnet.png', text: 'Subnet'     },
         /*
-        {id: 2, type:'EMU',    icon: 'img/Emu.png',         text: 'Emu(temp)'    },
-        {id: 3, type:'RT',     icon: 'img/Router.png',      text: 'Router(temp)' },
-        {id: 4, type:'STA',    icon: 'img/StationWifi.png', text: 'STA(temp)'    },
-        {id: 5, type:'TAP',    icon: 'img/Tap.png',         text: 'TAP(temp)'    }
+        {id: 2, type:'EMU',    icon: 'assets/img/Emu.png',         text: 'Emu(temp)'    },
+        {id: 3, type:'RT',     icon: 'assets/img/Router.png',      text: 'Router(temp)' },
+        {id: 4, type:'STA',    icon: 'assets/img/StationWifi.png', text: 'STA(temp)'    },
+        {id: 5, type:'TAP',    icon: 'assets/img/Tap.png',         text: 'TAP(temp)'    }
         */
       ],
       assign_name_prefix: '__node_default',

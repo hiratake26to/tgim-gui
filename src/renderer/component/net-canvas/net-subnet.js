@@ -43,7 +43,7 @@ export default class NetSubnet extends React.Component {
 
   componentDidMount() {
     const image = new window.Image()
-    image.src = 'img/icon/subnet.png'
+    image.src = 'assets/img/icon/subnet.png'
     image.onload = () => {
       this.setState({
         image: image,

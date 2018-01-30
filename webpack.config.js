@@ -4,7 +4,7 @@ module.exports = [
   {
     entry: './src/index.js',
     output: {
-      path: __dirname,
+      path: path.join(__dirname, 'dist'),
       filename: 'index.js'
     },
     node: {
@@ -25,7 +25,7 @@ module.exports = [
   {
     entry: './src/renderer/app.js',
     output: {
-      path: __dirname,
+      path: path.join(__dirname, 'dist'),
       filename: 'bundle.js'
     },
     module: {
@@ -38,5 +38,5 @@ module.exports = [
       ]
     },
     target: "electron-renderer"
-  },
+  }
 ];

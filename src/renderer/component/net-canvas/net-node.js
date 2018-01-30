@@ -43,7 +43,7 @@ export default class NetNode extends React.Component {
 
   componentDidMount() {
     const image = new window.Image()
-    image.src = 'img/Pc.png'
+    image.src = 'assets/img/Pc.png'
     image.onload = () => {
       this.setState({
         image: image,
