@@ -96,7 +96,12 @@ class AppMenu extends React.Component {
       gen_cpro.on('close', (code) => {
         console.log(`generator process exited with code ${code}`);
         // if success: remove temporary file
-        if (code === 0) fs.unlinkSync(temp_path)
+        if (code === 0) {
+          fs.unlinkSync(temp_path)
+          console.log('Success!')
+        } else {
+          console.error('Generator has error')
+        }
       })
       gen_cpro.on('error', (e) => {
         console.error('Could not spawn process `' + gen_path + '`.')
