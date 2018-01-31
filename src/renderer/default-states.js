@@ -10,7 +10,8 @@ export const defaultNetState = {
 
 export const defaultGuiState = {
   line: {},
-  editor: {}
+  editor: {},
+  work_dir: "",
 }
 
 export const defaultNodeProp = {

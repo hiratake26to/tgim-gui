@@ -10,6 +10,7 @@ class AppMenu extends React.Component {
   }
 
   onOpen = () => {
+    const mod_path = require('path')
     const path = remote.dialog.showOpenDialog( {
       filters: [
         { name: 'tgim-file(.json)', extensions: ['json'] }
@@ -21,6 +22,8 @@ class AppMenu extends React.Component {
       const data = JSON.parse( fs.readFileSync(path[0]) )
       this.props.initAllState()
       this.props.setNetState(data)
+      console.log(`change working directory in "${mod_path.dirname(path[0])}".`)
+      this.props.changeWorkDir(mod_path.dirname(path[0]))
     } else {
       console.log('open cancel')
     }
@@ -111,6 +114,33 @@ class AppMenu extends React.Component {
 
   }
 
+  onPack = () => {
+    const path = require('path')
+    
+    const { pack_path } = require('../../config.js')
+
+    { // run packager
+      const { spawn } = require('child_process')
+      const gen_cpro = spawn(pack_path, ['pack'], { cwd: this.props.guiState.work_dir })
+      gen_cpro.stdout.on('data', (data) => {console.log(''+data)})
+      gen_cpro.stderr.on('data', (data) => {console.log(''+data)})
+      gen_cpro.on('close', (code) => {
+        console.log(`packager process exited with code ${code}`);
+        // if success: remove temporary file
+        if (code === 0) {
+          console.log('Success!')
+        } else {
+          console.error('Packager has error')
+        }
+      })
+      gen_cpro.on('error', (e) => {
+        console.error('Could not spawn process `' + gen_path + '`.')
+        console.error('Check your packager path.')
+      })
+    }
+
+  }
+
   render() {
     return (
       <div>
@@ -123,6 +153,7 @@ class AppMenu extends React.Component {
               <Dropdown.Divider />
               <Dropdown.Header>Export</Dropdown.Header>
               <Dropdown.Item onClick={this.onGen}>Generate ns3 code</Dropdown.Item>
+              <Dropdown.Item onClick={this.onPack}>Package</Dropdown.Item>
               <Dropdown.Item>Save as picture</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

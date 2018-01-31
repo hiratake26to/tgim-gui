@@ -44,7 +44,7 @@
         "x": 54,
         "y": 177
       },
-      "load": "./local/Subnet0.json",
+      "load": "./Subnet0.json",
       "netifs": [
         {
           "up": "gateway",
@@ -61,7 +61,7 @@
         "x": 81,
         "y": 420
       },
-      "load": "./local/Subnet1.json",
+      "load": "./Subnet1.json",
       "netifs": [
         {
           "up": "gateway",

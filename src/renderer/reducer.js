@@ -59,6 +59,12 @@ export const guiReducer = handleActions({
       }
     }
   },
+  [Act.changeWorkDir]: (state, { payload: { path }}) => {
+    return {
+      ...state,
+      work_dir: path
+    }
+  },
 
   // ノードが消されるときに関連するライン情報も削除する
   [Act.delNode]: (state, { payload: { id }}) => {

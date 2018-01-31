@@ -43,3 +43,6 @@ export const delLine = createAction('DEL_LINE', (id) => ({ id: id }))
 // Editor
 export const showProps = createAction('SHOW_PROPS', (type, id) => ({ type: type, id: id}))
 export const hideProps = createAction('HIDE_PROPS')
+
+// Working directory
+export const changeWorkDir = createAction('CHANGE_WORK_DIR', (path) => ({ path: path}))
