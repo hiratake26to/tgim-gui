@@ -52,6 +52,15 @@ class AppMenu extends React.Component {
     save_dir = path.join(save_dir[0], '/')
 
     // generate temporary file
+    if ( !fs.existsSync('temp') ) {
+      try {
+        fs.mkdirSync('temp')
+      } catch (e) {
+        console.error('Could not `mkdir temp`.')
+        return 1
+      }
+    }
+
     const temp_path = './temp/' + this.props.netState.name + '.json'
     if ( fs.existsSync(temp_path) ) {
       const ret = remote.dialog.showMessageBox({
@@ -68,7 +77,6 @@ class AppMenu extends React.Component {
 
     // generate and save for ns3 code
     console.log('save to "' + save_dir + '"')
-    const { spawn } = require('child_process')
     const { gen_path, gen_flags } = require('../../config.js')
     const in_files = [
       path.join(temp_path)
@@ -80,15 +88,22 @@ class AppMenu extends React.Component {
     console.log(`in_files="${in_files}"`)
     console.log(`args=[${args}]`)
 
-    // run generator
-    const gen_cpro = spawn(gen_path, args)
-    gen_cpro.stdout.on('data', (data) => {console.log(''+data)})
-    gen_cpro.stderr.on('data', (data) => {console.log(''+data)})
-    gen_cpro.on('close', (code) => {
-      console.log(`generator process exited with code ${code}`);
-      // if success: remove temporary file
-      if (code === 0) fs.unlinkSync(temp_path)
-    })
+    { // run generator
+      const { spawn } = require('child_process')
+      const gen_cpro = spawn(gen_path, args)
+      gen_cpro.stdout.on('data', (data) => {console.log(''+data)})
+      gen_cpro.stderr.on('data', (data) => {console.log(''+data)})
+      gen_cpro.on('close', (code) => {
+        console.log(`generator process exited with code ${code}`);
+        // if success: remove temporary file
+        if (code === 0) fs.unlinkSync(temp_path)
+      })
+      gen_cpro.on('error', (e) => {
+        console.error('Could not spawn process `' + gen_path + '`.')
+        console.error('Check your generator path.')
+      })
+    }
+
   }
 
   render() {
