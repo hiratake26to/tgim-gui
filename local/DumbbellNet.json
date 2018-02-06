@@ -1,0 +1,151 @@
+{
+  "name": "initialNet",
+  "node": {
+    "__node_default0": {
+      "point": {
+        "x": 64,
+        "y": 48
+      },
+      "netifs": [
+        {
+          "connect": "__ch_default0"
+        }
+      ]
+    },
+    "__node_default1": {
+      "point": {
+        "x": 161,
+        "y": 48
+      },
+      "netifs": [
+        {
+          "connect": "__ch_default0"
+        }
+      ]
+    },
+    "__node_default2": {
+      "point": {
+        "x": 253,
+        "y": 47
+      },
+      "netifs": [
+        {
+          "connect": "__ch_default0"
+        }
+      ]
+    },
+    "__node_default3": {
+      "point": {
+        "x": 161,
+        "y": 166
+      },
+      "netifs": [
+        {
+          "connect": "__ch_default0"
+        },
+        {
+          "connect": "__ch_default2"
+        }
+      ]
+    },
+    "__node_default4": {
+      "point": {
+        "x": 356,
+        "y": 309
+      },
+      "netifs": [
+        {
+          "connect": "__ch_default1"
+        },
+        {
+          "connect": "__ch_default2"
+        }
+      ]
+    },
+    "__node_default5": {
+      "point": {
+        "x": 410,
+        "y": 411
+      },
+      "netifs": [
+        {
+          "connect": "__ch_default1"
+        }
+      ]
+    },
+    "__node_default6": {
+      "point": {
+        "x": 491,
+        "y": 411
+      },
+      "netifs": [
+        {
+          "connect": "__ch_default1"
+        }
+      ]
+    },
+    "__node_default7": {
+      "point": {
+        "x": 328,
+        "y": 412
+      },
+      "netifs": [
+        {
+          "connect": "__ch_default1"
+        }
+      ]
+    }
+  },
+  "subnet": {},
+  "channel": {
+    "__ch_default0": {
+      "point": {
+        "x": 161,
+        "y": 113
+      },
+      "type": "Csma",
+      "config": {
+        "Delay": "1ms",
+        "DataRate": "100Mbps"
+      }
+    },
+    "__ch_default1": {
+      "point": {
+        "x": 409,
+        "y": 348
+      },
+      "type": "Csma",
+      "config": {
+        "Delay": "1ms",
+        "DataRate": "100Mbps"
+      }
+    },
+    "__ch_default2": {
+      "point": {
+        "x": 264,
+        "y": 238
+      },
+      "type": "Csma",
+      "config": {
+        "Delay": "1ms",
+        "DataRate": "100Mbps"
+      }
+    }
+  },
+  "apps": {
+    "__app_default0": {
+      "name": "__app_default0",
+      "type": "ping",
+      "args": {
+        "shost": "__node_default0",
+        "sport": 60000,
+        "dhost": "__node_default6",
+        "dport": 8080,
+        "start": 1,
+        "stop": 10,
+        "rate": "1Mbps"
+      },
+      "activeItem": "props"
+    }
+  }
+}
