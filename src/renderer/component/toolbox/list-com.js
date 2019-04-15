@@ -46,9 +46,10 @@ export class ChannelListComponent extends ListComponent {
       id: 'channel-list-component',
       header: 'Channel',
       items: [
-        { id: 0, icon: 'assets/img/Ap-Wifi.png', text: 'AP (temp)'     },
-	{ id: 1, icon: 'assets/img/Hub.png',     text: 'Hub (temp)'    },
-	{ id: 2, icon: 'assets/img/Switch.png',  text: 'Switch (temp)' }
+        { id: 0, icon: 'assets/img/Ap-Wifi.png', text: 'AP (temp)'     , type: 'AP(temp)'},
+	{ id: 1, icon: 'assets/img/Hub.png',     text: 'Hub (CSMA)'    , type: 'Csma'},
+	{ id: 2, icon: 'assets/img/Hub.png',     text: 'Hub (P2P)'     , type: 'PointToPoint'},
+	{ id: 3, icon: 'assets/img/Switch.png',  text: 'Switch (temp)' , type: ''}
       ],
       assign_name_prefix: '__ch_default',
       last_assign: 0
@@ -58,7 +59,8 @@ export class ChannelListComponent extends ListComponent {
       // TODO: add Channel icon to the NetCanvas (will be marge form NodeListComponent)
       var name = this.state.assign_name_prefix + this.state.last_assign
       this.state.last_assign++
-      this.props.handleAddChannel(name)
+      const type = this.state.items[e.id].type
+      this.props.handleAddChannel(name, type)
     }
 
   }

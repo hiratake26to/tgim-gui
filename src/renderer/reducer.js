@@ -291,14 +291,15 @@ export const netReducer = handleActions({
     }
   },
 
-  [Act.addChannel]: (state, { payload: { id }}) => {
+  [Act.addChannel]: (state, { payload: { id, type }}) => {
     return {
       ...state,
       channel: {
         ...state.channel,
         [id]: {
           ...state.channel[id],
-          ...defaultChannelProp
+          ...defaultChannelProp,
+          type: type
         }
       }
     }
