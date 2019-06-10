@@ -46,10 +46,10 @@ export class ChannelListComponent extends ListComponent {
       id: 'channel-list-component',
       header: 'Channel',
       items: [
-        { id: 0, icon: 'assets/img/Ap-Wifi.png', text: 'AP (temp)'     , type: 'AP(temp)'},
-	{ id: 1, icon: 'assets/img/Hub.png',     text: 'Hub (CSMA)'    , type: 'Csma'},
-	{ id: 2, icon: 'assets/img/Hub.png',     text: 'Hub (P2P)'     , type: 'PointToPoint'},
-	{ id: 3, icon: 'assets/img/Switch.png',  text: 'Switch (temp)' , type: ''}
+        { id: 0, icon: 'assets/img/tgim/csma1.png', text: 'CSMA',         type: 'Csma'},
+        { id: 1, icon: 'assets/img/tgim/ppp1.png',  text: 'PointToPoint', type: 'PointToPoint'},
+        { id: 2, icon: 'assets/img/tgim/wifi1.png', text: 'Wifi Infrastructure', type: 'WifiApSta'},
+        { id: 3, icon: 'assets/img/tgim/wifi1.png', text: 'Wifi Ad-hoc',  type: 'WifiAdhoc'}
       ],
       assign_name_prefix: '__ch_default',
       last_assign: 0

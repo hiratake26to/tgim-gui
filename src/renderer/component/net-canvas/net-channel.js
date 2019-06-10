@@ -3,11 +3,19 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Image, Group} from 'react-konva'
 
+var icon = {
+  'Csma': 'assets/img/tgim/csma1.png',
+  'PointToPoint': 'assets/img/tgim/ppp1.png',
+  'WifiApSta': 'assets/img/tgim/wifi1.png',
+  'WifiAdhoc': 'assets/img/tgim/wifi2.png',
+}
+
 export default class NetChannel extends React.Component {
   constructor(prop) {
     super(prop)
 
     this.state = {
+      type: prop.channel[prop.id].type, // Csma | PointToPoint | WifiApSta | WifiAdhoc
       image: null,
       id: prop.id,
       x: prop.x,
@@ -16,8 +24,8 @@ export default class NetChannel extends React.Component {
   }
 
   componentDidMount() {
-    const image = new window.Image()
-    image.src = 'assets/img/Hub.png'
+    const image = new window.Image(40, 40)
+    image.src = icon[this.state.type]
     image.onload = () => {
       this.setState({
         image: image,

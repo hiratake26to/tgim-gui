@@ -3,6 +3,7 @@ import React from 'react'
 import { Dropdown, Icon, Menu, Segment } from 'semantic-ui-react'
 import { remote } from 'electron'
 import * as fs from 'fs'
+import * as libpath from 'path'
 
 class AppMenu extends React.Component {
   onNew = () => {
@@ -10,7 +11,6 @@ class AppMenu extends React.Component {
   }
 
   onOpen = () => {
-    const mod_path = require('path')
     const path = remote.dialog.showOpenDialog( {
       filters: [
         { name: 'tgim-file(.json)', extensions: ['json'] }
@@ -22,8 +22,8 @@ class AppMenu extends React.Component {
       const data = JSON.parse( fs.readFileSync(path[0]) )
       this.props.initAllState()
       this.props.setNetState(data)
-      console.log(`change working directory in "${mod_path.dirname(path[0])}".`)
-      this.props.changeWorkDir(mod_path.dirname(path[0]))
+      console.log(`change working directory in "${libpath.dirname(path[0])}".`)
+      this.props.changeWorkDir(libpath.dirname(path[0]))
     } else {
       console.log('open cancel')
     }
@@ -46,13 +46,12 @@ class AppMenu extends React.Component {
   }
 
   onGen = () => {
-    const path = require('path')
     let save_dir = remote.dialog.showOpenDialog( {
       properties: ['openDirectory']
     })
 
     if ( !save_dir || !save_dir[0] ) return
-    save_dir = path.join(save_dir[0], '/')
+    save_dir = libpath.join(save_dir[0], '/')
 
     // generate temporary file
     if ( !fs.existsSync('temp') ) {
@@ -82,7 +81,7 @@ class AppMenu extends React.Component {
     console.log('save to "' + save_dir + '"')
     const { gen_path, gen_flags } = require('../../config.js')
     const in_files = [
-      path.join(temp_path)
+      libpath.join(temp_path)
     ]
     const args = ['--output-dir', save_dir, ...gen_flags, ...in_files]
     // debug message
@@ -115,8 +114,6 @@ class AppMenu extends React.Component {
   }
 
   onPack = () => {
-    const path = require('path')
-    
     const { pack_path } = require('../../config.js')
 
     { // run packager

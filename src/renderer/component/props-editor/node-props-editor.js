@@ -31,8 +31,21 @@ class NetIfsForm extends Component {
     })
 
     return (
-      <div>
-        <label>connect</label> {content}
+      <div className="two fields">
+        <div className="field">
+          <label>connect</label> {content}
+        </div>
+        <div className="field">
+          <label>as</label>
+          <select multiple="" className="ui dropdown">
+          <option value="">Select!!!!!!!!!!!!!! </option>
+          <option value="Sta">Station</option>
+          <option value="Ap">Access Point</option>
+          <option value="Adhoc">Adhoc</option>
+          <option value="Switch">Swtich</option>
+          //<option value="Router">Router</option>
+          </select>
+        </div>
         <Button icon onClick={this.props.onAdd}>
           <Icon name='add' />
         </Button>
@@ -42,11 +55,25 @@ class NetIfsForm extends Component {
 }
 
 export default class NodePropsEditor extends BasePropsEditor {
+  init = () => {
+    this.state = ({
+      ...this.state,
+      name: this.props.id,
+      netifs: JSON.parse(JSON.stringify(
+                this.props.node[this.props.id].netifs
+              ))
+    })
+  }
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
   handleDeleteClick = (e) => this.setState(
     this.props.delNode(this.props.id)
   )
 
+  handleRevert = () => {
+    console.log('click revert')
+    this.init()
+    this.setState(this.state) // force rerender
+  }
   handleSave = () => {
     //console.log('click save')
     //console.log(this.state)
@@ -82,14 +109,7 @@ export default class NodePropsEditor extends BasePropsEditor {
 
   constructor(prop) {
     super(prop)
-
-    this.state = ({
-      ...this.state,
-      name: this.props.id,
-      netifs: JSON.parse(JSON.stringify(
-                this.props.node[this.props.id].netifs
-              ))
-    })
+    this.init()
   }
 
   handleChange = (e, { name, value }) => {
@@ -133,7 +153,7 @@ export default class NodePropsEditor extends BasePropsEditor {
         <Divider />
 
         <Button.Group fluid>
-          <Button>Revert</Button>
+          <Button onClick={this.handleRevert}>Revert</Button>
           <Button.Or />
           <Button positive onClick={this.handleSave}>Save</Button>
         </Button.Group>

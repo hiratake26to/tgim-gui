@@ -118,6 +118,7 @@ a, a:hover, a:focus {
 }
 
 #sidebar ul li a {
+    color: #fff;
     padding: 10px;
     font-size: 1.1em;
     display: block;

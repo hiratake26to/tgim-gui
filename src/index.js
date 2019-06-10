@@ -1,8 +1,7 @@
 'use strict'
 const {app, BrowserWindow} = require('electron')
-const path = require('path')
-const url = require('url')
-import * as fs from 'fs'
+//import * as path from 'path'
+//import * as url from 'url'
 
 let win
 
@@ -26,14 +25,23 @@ function parseArgs() {
   })
 }
 
-function createWindow(argv) {
-  win = new BrowserWindow({width: 1000, height: 600})
+//function createWindow(argv) {
+function createWindow() {
+  win = new BrowserWindow({
+    width: 1000, height: 600,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
 
+  /*
   win.loadURL(url.format({
     pathname : path.join(__dirname, 'index.html'),
     protocol : 'file:',
     slashes  : true
   }))
+  */
+  win.loadURL('file://' + __dirname + '/index.html')
 
   //win.webContents.openDevTools()
   //win.webContents.closeDevTools()
@@ -43,14 +51,15 @@ function createWindow(argv) {
     win = null
   })
 
-  if (argv.file) {
-    win.webContents.on('did-finish-load', () => {
-      win.webContents.send('open', argv.file)
-    })
-  }
+  //if (argv.file) {
+  //  win.webContents.on('did-finish-load', () => {
+  //    win.webContents.send('open', argv.file)
+  //  })
+  //}
 }
 
-app.on('ready', parseArgs)
+//app.on('ready', parseArgs)
+app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
   if (process.platform != 'darwin') {
