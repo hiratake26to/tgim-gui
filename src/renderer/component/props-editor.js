@@ -83,7 +83,7 @@ class PropsEditor extends React.Component {
     }
 
     return (
-      <div>
+      <div className='props-editor'>
         <Sidebar
           as={Segment}
           animation='overlay'

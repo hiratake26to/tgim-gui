@@ -24,7 +24,8 @@ module.exports = [
     target: "electron-renderer",
     entry: {
       preload: './src/preload.js',
-      app: './src/renderer/app.js'
+      app: './src/renderer/app.js',
+      afterload: './src/afterload.js'
     },
     output: {
       path: path.join(__dirname, 'dist'),
@@ -37,11 +38,11 @@ module.exports = [
     },
 
     plugins: [
-      // generate index.html that contain script to load [preload|app].bundle.js(generated from preload.js app.js)
+      // generate index.html that contain script to load [preload|app|afterload].bundle.js
       new HtmlWebpackPlugin({
-        filename: path.join(__dirname, 'dist/index.html'),
+        chunks: ['preload', 'app'],
         template: './src/index-temp.html',
-        inject: 'body'
+        filename: path.join(__dirname, 'dist/index.html')
       }),
       new HtmlWebpackTagsPlugin({
         // require liblarys(css,js) to here
@@ -52,7 +53,9 @@ module.exports = [
           'assets/bootstrap/css/bootstrap-theme.min.css',
           'assets/bootstrap/js/bootstrap.min.js',
           'assets/Semantic-UI-2.4/dist/semantic.css',
-          'assets/Semantic-UI-2.4/dist/semantic.js'
+          'assets/Semantic-UI-2.4/dist/semantic.js',
+          // afterload
+          'afterload.bundle.js'
         ]
       })
     ]

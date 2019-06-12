@@ -1,20 +1,46 @@
 'use strict'
 import React, { Component } from 'react'
-import { Table, List, Divider, Container, Message, Button, Checkbox, Form, Grid, Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
+import { Dropdown, Table, List, Divider, Container, Message, Button, Checkbox, Form, Grid, Header, Icon, Image, Input, Menu, Segment, Sidebar } from 'semantic-ui-react'
 
 import Exception from './exception'
 import BasePropsEditor from './base-props-editor'
 
 class NetIfaceForm extends Component {
   // onDelete(this.props.id)
+
+  rolesTbl = [
+    {key: 'router', value: "Router", text: "Router"},
+    {key: 'switch', value: "Switch", text: "Switch"},
+    {key: 'sta', value: "Sta",    text: "Station"},
+    {key: 'ap', value: "Ap",     text: "Access Point"},
+    {key: 'adhoc', value: "Adhoc",  text: "Adhoc"},
+  ];
+  
   render() {
+    console.log('[this.props.nic] ->', [this.props.nic])
+
+    const connect = this.props.nic.connect;
+    const as = this.props.nic.as;
+
     return (
-      <Form.Group inline>
-        <Form.Input id={this.props.id} name="connect" defaultValue={this.props.connect} onChange={this.props.onChange} />
-        <Button icon onClick={() => this.props.onDelete(this.props.id)}>
-          <Icon name='delete' />
-        </Button>
-      </Form.Group>
+      <Form>
+        <Form.Group>
+          <Form.Field width={7}>
+            <label>connect</label>
+            <Input fluid name="connect" placeholder='Channel' defaultValue={connect} onChange={this.props.onChange} idx={this.props.id} />
+          </Form.Field>
+          <Form.Field width={6}>
+            <label>as</label>
+            <Dropdown fluid name="as" placeholder='Role' defaultValue={as} onChange={this.props.onChange} idx={this.props.id} fluid multiple selection options={this.rolesTbl} />
+          </Form.Field>
+          <Form.Field width={3}>
+            <label>del</label>
+            <Button fluid icon onClick={()=>this.props.onDelete(this.props.id)}>
+              <Icon name='delete' />
+            </Button>
+          </Form.Field>
+        </Form.Group>
+      </Form>
     )
   }
 }
@@ -25,27 +51,14 @@ class NetIfsForm extends Component {
   }
 
   render() {
-    let i = 0
-    const content = this.props.netifs().map( ({connect}) => {
-      return (<NetIfaceForm id={i++} connect={connect} onChange={this.props.onChange} onDelete={this.props.onDelete}/>)
-    })
-
+    const netifs = this.props.netifs();
+    const content = netifs.map( (nic, idx) => {
+      return (<NetIfaceForm id={idx} nic={nic} onChange={this.props.onChange} onDelete={this.props.onDelete}/>)
+    });
+    console.log('NetIfsForm.content->', content);
     return (
-      <div className="two fields">
-        <div className="field">
-          <label>connect</label> {content}
-        </div>
-        <div className="field">
-          <label>as</label>
-          <select multiple="" className="ui dropdown">
-          <option value="">Select!!!!!!!!!!!!!! </option>
-          <option value="Sta">Station</option>
-          <option value="Ap">Access Point</option>
-          <option value="Adhoc">Adhoc</option>
-          <option value="Switch">Swtich</option>
-          //<option value="Router">Router</option>
-          </select>
-        </div>
+      <div>
+        {content}
         <Button icon onClick={this.props.onAdd}>
           <Icon name='add' />
         </Button>
@@ -75,8 +88,7 @@ export default class NodePropsEditor extends BasePropsEditor {
     this.setState(this.state) // force rerender
   }
   handleSave = () => {
-    //console.log('click save')
-    //console.log(this.state)
+    console.log('click save, NodePropsEditor.state->', this.state)
     this.props.assignNodeNetif(this.state.name, JSON.parse(JSON.stringify(this.state.netifs)))
   }
 
@@ -112,13 +124,17 @@ export default class NodePropsEditor extends BasePropsEditor {
     this.init()
   }
 
-  handleChange = (e, { name, value }) => {
-    if (name === 'connect') {
-      //console.log(e.target.id)
+  handleChange = (e, v) => {
+    //console.log('call handleChange, e->', e);
+    //console.log('call handleChange, v->', v);
+    const { name, value } = v;
+    if (name == 'connect' || name == 'as') {
+      const { idx } = v;
+      //console.log(idx)
       const newArray = Object.assign([], this.state.netifs);
-      newArray[e.target.id] = 
+      newArray[idx] = 
         { 
-          ...this.state.netifs[e.target.id], connect: value
+          ...this.state.netifs[idx], [name]: value
         }
       this.setState(
         { 
@@ -129,7 +145,10 @@ export default class NodePropsEditor extends BasePropsEditor {
         }
       )
     } else {
-      this.setState({[name]: value})
+      this.setState({
+        ...this.state,
+        [name]: value
+      })
     }
   }
 
