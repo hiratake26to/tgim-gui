@@ -134,6 +134,17 @@ export const netReducer = handleActions({
       }
     }
   },
+  [Act.copyNode]: (state, { payload: { id, newid }}) => {
+    return {
+      ...state,
+      node: {
+        ...state.node,
+        [newid]: {
+          ...state.node[id]
+        }
+      }
+    }
+  },
   [Act.moveNode]: (state, { payload: { id, point: [x,y] }}) => {
     return {
       ...state,

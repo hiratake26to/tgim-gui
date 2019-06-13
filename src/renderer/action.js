@@ -8,6 +8,7 @@ export const setNetState = createAction('SET_NET_STATE', (newState) => (newState
 // Node
 export const addNode         = createAction('ADD_NODE',          (id)         => ({ id: id }))
 export const delNode         = createAction('DEL_NODE',          (id)         => ({ id: id }))
+export const copyNode        = createAction('COPY_NODE',         (id, newid)  => ({ id: id, newid: newid }))
 export const moveNode        = createAction('MOVE_NODE',         (id, x, y)   => ({ id: id, point: [x,y] }))
 export const assignNode      = createAction('ASSIGN_NODE',       (id, prop)   => ({ id: id, prop:prop }) )
 // netif

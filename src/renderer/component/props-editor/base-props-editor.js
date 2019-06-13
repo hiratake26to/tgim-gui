@@ -1,6 +1,6 @@
 'use strict'
 import React, { Component } from 'react'
-import { List, Divider, Container, Message, Button, Checkbox, Form, Grid, Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
+import { List, Divider, Container, Message, Button, Checkbox, Form, Grid, Header, Icon, Image, Menu, Modal, Segment, Sidebar } from 'semantic-ui-react'
 
 import Exception from './exception'
 
@@ -37,16 +37,13 @@ export default class BasePropsEditor extends Component {
       
     })()
 
-
     return (
       <div>
         <Menu pointing secondary>
           <Menu.Item name='props' active={activeItem === 'props'} onClick={this.handleItemClick} />
           <Menu.Item name='danger' active={activeItem === 'danger'} onClick={this.handleItemClick} />
         </Menu>
-
         {content}
-
       </div>
     )
   }

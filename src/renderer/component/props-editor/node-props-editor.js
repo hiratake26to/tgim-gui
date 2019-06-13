@@ -89,7 +89,28 @@ export default class NodePropsEditor extends BasePropsEditor {
   }
   handleSave = () => {
     console.log('click save, NodePropsEditor.state->', this.state)
-    this.props.assignNodeNetif(this.state.name, JSON.parse(JSON.stringify(this.state.netifs)))
+    // [TODO] assertion
+    // valid new node name wheather it is duplicate to exised node.
+    // check whether state.name same to initial name.
+    if (this.props.id != this.state.name) {
+      // then editor will change name
+      // check, new node name wheather it is duplicate to exised node.
+      if (this.state.name in this.props.node) {
+        // invalid!
+        showSaveError("could not to save. due to duplicate node name.");
+        return;
+      }
+    }
+    
+    // update
+    this.props.assignNodeNetif(this.props.id, JSON.parse(JSON.stringify(this.state.netifs)))
+
+    // when node name change, copy current node to new node, and delete current node.
+    if (this.state.name != this.props.id) {
+      this.props.node
+      this.props.copyNode(this.props.id, this.state.name)
+      this.props.delNode(this.props.id)
+    }
   }
 
   handleIfaceAdd = () => {

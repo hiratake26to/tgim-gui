@@ -31,12 +31,12 @@ module.exports = [
       path: path.join(__dirname, 'dist'),
       filename: '[name].bundle.js'
     },
+    devtool: 'inline-source-map',
     module: {
       rules: [
         { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' }
       ]
     },
-
     plugins: [
       // generate index.html that contain script to load [preload|app|afterload].bundle.js
       new HtmlWebpackPlugin({

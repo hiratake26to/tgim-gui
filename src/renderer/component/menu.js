@@ -30,13 +30,29 @@ class AppMenu extends React.Component {
   }
 
   onSave = () => {
-    const path = remote.dialog.showSaveDialog( {
+    var path = remote.dialog.showSaveDialog( {
       filters: [
         { name: 'tgim-file(.json)', extensions: ['json'] }
       ]
     })
 
     if ( path ) {
+      // check extension whether '.json'
+      if (!path.match(/\.json$/)) {
+        path += '.json'
+        // check duplicate
+        if (fs.existsSync(path)) {
+          const bt_idx = remote.dialog.showMessageBox({
+            type: 'question',
+            buttons: ['Cancel', 'Replace'],
+            message: `A file named "${libpath.basename(path)}" already exists. Do you want to replace it?`,
+            detail: `The file already exists in "${path}". Replacing it will overwrite its contents.`
+          })
+          if (bt_idx != 1) {
+            return; // abort
+          }
+        }
+      }
       console.log('save to "' + path + '"')
       console.log(this.props.netState)
       fs.writeFileSync(path, JSON.stringify(this.props.netState, null, 2), 'utf8')
