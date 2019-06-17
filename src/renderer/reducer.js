@@ -324,6 +324,17 @@ export const netReducer = handleActions({
       }
     }
   },
+  [Act.copyChannel]: (state, { payload: { id, newid }}) => {
+    return {
+      ...state,
+      channel: {
+        ...state.channel,
+        [newid]: {
+          ...state.channel[id]
+        }
+      }
+    }
+  },
   [Act.moveChannel]: (state, { payload: { id, point: [x,y] }}) => {
     return {
       ...state,

@@ -29,6 +29,7 @@ export const assignSubnetNetif = createAction('ASSIGN_SUBNET_NETIF', (id, netifs
 // Channel
 export const addChannel    = createAction('ADD_CHANNEL',    (id, type) => ({ id: id, type: type }))
 export const delChannel    = createAction('DEL_CHANNEL',    (id)       => ({ id: id }))
+export const copyChannel   = createAction('COPY_CHANNEL',   (id, newid)=> ({ id: id, newid: newid }))
 export const moveChannel   = createAction('MOVE_CHANNEL',   (id, x, y) => ({ id: id, point: [x,y] }))
 export const assignChannel = createAction('ASSIGN_CHANNEL', (id, prop) => ({ id: id, prop:prop }))
 

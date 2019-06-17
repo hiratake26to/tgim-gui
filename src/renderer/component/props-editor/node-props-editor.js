@@ -27,11 +27,11 @@ class NetIfaceForm extends Component {
         <Form.Group>
           <Form.Field width={7}>
             <label>connect</label>
-            <Input fluid name="connect" placeholder='Channel' defaultValue={connect} onChange={this.props.onChange} idx={this.props.id} />
+            <Input fluid name="connect" placeholder='Channel' value={connect} onChange={this.props.onChange} idx={this.props.id} />
           </Form.Field>
           <Form.Field width={6}>
             <label>as</label>
-            <Dropdown fluid name="as" placeholder='Role' defaultValue={as} onChange={this.props.onChange} idx={this.props.id} fluid multiple selection options={this.rolesTbl} />
+            <Dropdown fluid name="as" placeholder='Role' value={as} onChange={this.props.onChange} idx={this.props.id} fluid multiple selection options={this.rolesTbl} />
           </Form.Field>
           <Form.Field width={3}>
             <label>del</label>
@@ -83,7 +83,6 @@ export default class NodePropsEditor extends BasePropsEditor {
   )
 
   handleRevert = () => {
-    console.log('click revert')
     this.init()
     this.setState(this.state) // force rerender
   }
@@ -116,7 +115,6 @@ export default class NodePropsEditor extends BasePropsEditor {
   handleIfaceAdd = () => {
     const newArray = Object.assign([], this.state.netifs);
     newArray.push({ connect: "" })
-    //console.log(newArray)
     this.setState(
       { 
         ...this.state,
@@ -127,7 +125,6 @@ export default class NodePropsEditor extends BasePropsEditor {
     )
   }
   handleIfaceDelete = (id) => {
-    //console.log('click delete: ' + id)
     const newArray = Object.assign([], this.state.netifs);
     newArray.splice(id, 1)
     this.setState(
@@ -146,12 +143,9 @@ export default class NodePropsEditor extends BasePropsEditor {
   }
 
   handleChange = (e, v) => {
-    //console.log('call handleChange, e->', e);
-    //console.log('call handleChange, v->', v);
     const { name, value } = v;
     if (name == 'connect' || name == 'as') {
       const { idx } = v;
-      //console.log(idx)
       const newArray = Object.assign([], this.state.netifs);
       newArray[idx] = 
         { 
@@ -178,7 +172,7 @@ export default class NodePropsEditor extends BasePropsEditor {
       <Form>
         <Form.Field>
           <label>Name</label>
-          <Form.Input name="name" defaultValue={this.state.name} onChange={this.handleChange} />
+          <Form.Input name="name" value={this.state.name} onChange={this.handleChange} />
         </Form.Field>
 
         <Divider />
