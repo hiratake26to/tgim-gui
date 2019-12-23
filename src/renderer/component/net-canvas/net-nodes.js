@@ -10,7 +10,6 @@ export default class NetNodes extends React.Component {
   }
 
   render() {
-    console.log(this.props.node)
     return (
       <Group>
         { Object.keys(this.props.node).map( (key) => {
@@ -19,6 +18,7 @@ export default class NetNodes extends React.Component {
             <NetNode
               key={key} id={key}
               x={n.point.x} y={n.point.y}
+              mapPointToState={this.props.mapPointToState}
 
               node={this.props.node} channel={this.props.channel} line={this.props.line}
               handleDragend={this.props.handleMove}

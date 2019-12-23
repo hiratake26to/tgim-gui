@@ -13,11 +13,11 @@ export default class ToolBox extends React.Component {
     }
   }
 
-  onAddNode = (type, name) => {
+  onAddNode = (type, name, auto=false) => {
     if (type === 'NODE') {
-      this.props.addNode(name)
+      this.props.addNodeAuto(name)
     } else if (type === 'SUBNET') {
-      this.props.addSubnet(name)
+      this.props.addSubnetAuto(name)
     }
   }
 
@@ -30,8 +30,8 @@ export default class ToolBox extends React.Component {
 	  </div>
 	  <ul className="list-unstyled components">
 	    <NodeListComponent handleAdd={this.onAddNode} />
-	    <ChannelListComponent handleAddChannel={this.props.addChannel}/>
-	    <ApplicationListComponent handleAddApp={this.props.addApp}/>
+	    <ChannelListComponent handleAddChannelAuto={this.props.addChannelAuto}/>
+	    <ApplicationListComponent handleAddAppAuto={this.props.addAppAuto}/>
 	  </ul>
 	</nav>
       </div>

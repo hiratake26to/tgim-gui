@@ -1,65 +1,36 @@
 'use strict'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Image, Group} from 'react-konva'
+import NetIcon from './net-icon'
 
 var icon = {
-  'Csma': 'assets/img/tgim/csma1.png',
-  'PointToPoint': 'assets/img/tgim/ppp1.png',
-  'WifiApSta': 'assets/img/tgim/wifi1.png',
-  'WifiAdhoc': 'assets/img/tgim/wifi2.png',
+  'Csma':         'assets/img/channel/csma1.png',
+  'PointToPoint': 'assets/img/channel/ppp1.png',
+  'WifiApSta':    'assets/img/channel/wifi1.png',
+  'WifiAdhoc':    'assets/img/channel/wifi2.png',
 }
 
 export default class NetChannel extends React.Component {
   constructor(prop) {
     super(prop)
-
     this.state = {
+      id: prop.id,
       type: prop.channel[prop.id].type, // Csma | PointToPoint | WifiApSta | WifiAdhoc
       image: null,
-      id: prop.id,
-      x: prop.x,
-      y: prop.y,
     }
-  }
-
-  componentDidMount() {
-    const image = new window.Image(40, 40)
-    image.src = icon[this.state.type]
-    image.onload = () => {
-      this.setState({
-        image: image,
-        offsetX: image.width/2,
-        offsetY: image.height/2
-      })
-    }
+    this.state.image = new window.Image(40, 40)
+    this.state.image.src = icon[this.state.type]
   }
 
   render() {
-    return (
-      <Image
-        image={this.state.image}
-        draggable={true}
-        x={this.state.x}
-        y={this.state.y}
-        offsetX={this.state.offsetX}
-        offsetY={this.state.offsetY}
-        dragBoundFunc={(pos) =>{
-          this.state.x = pos.x
-          this.state.y = pos.y
-          this.props.handleDragend(this.state.id, this.state.x, this.state.y)
-          return {
-              x: pos.x,
-              y: pos.y
-          }
-        }}
-        onClick={() => this.props.showProps('CHANNEL', this.state.id)}
-        onDragend={(e) => {
-          // TODO: if out of the canvas area, it necessary to keep points within area.
-          //var x = e.evt.layerX
-          //var y = e.evt.layerY
-        }}
-      />
-    )
+    return <NetIcon
+      x={this.props.x}
+      y={this.props.y}
+      name={this.state.id}
+      image={this.state.image}
+      onClick={() => this.props.showProps('CHANNEL', this.state.id)}
+      onDragmove={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}
+      onDragend={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}
+    />
   }
 }

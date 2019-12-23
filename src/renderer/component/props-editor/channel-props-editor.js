@@ -26,11 +26,11 @@ export default class ChannelPropsEditor extends BasePropsEditor {
   handleSave = () => {
     console.log('click save, ChannelPropsEditor.state->', this.state)
     // [TODO] assertion
-    // valid new node name wheather it is duplicate to exised node.
+    // valid new channel name wheather it is duplicate to exised channel.
     // check whether state.name same to initial name.
     if (this.props.id != this.state.name) {
       // then editor will change name
-      // check, new node name wheather it is duplicate to exised node.
+      // check, new channel name wheather it is duplicate to exised channel.
       if (this.state.name in this.props.channel) {
         // invalid!
         showSaveError("could not to save. due to duplicate channel name.");
@@ -47,11 +47,11 @@ export default class ChannelPropsEditor extends BasePropsEditor {
       }
     )
 
-    // when node name change, copy current node to new node, and delete current node.
+    // when channel name change, copy current channel to new channel, and delete current channel.
     if (this.state.name != this.props.id) {
-      this.props.node
       this.props.copyChannel(this.props.id, this.state.name)
       this.props.delChannel(this.props.id)
+      this.props.showProps('CHANNEL', this.state.name)
     }
   }
 

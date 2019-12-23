@@ -6,4 +6,5 @@ dist:
 
 clean:
 	rm -fr ./node_modules
+	rm -fr ./test
 	rm -fr ./dist

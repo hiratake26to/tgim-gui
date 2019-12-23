@@ -46,21 +46,17 @@ export class ChannelListComponent extends ListComponent {
       id: 'channel-list-component',
       header: 'Channel',
       items: [
-        { id: 0, icon: 'assets/img/tgim/csma1.png', text: 'CSMA',         type: 'Csma'},
-        { id: 1, icon: 'assets/img/tgim/ppp1.png',  text: 'PointToPoint', type: 'PointToPoint'},
-        { id: 2, icon: 'assets/img/tgim/wifi1.png', text: 'Wifi Infrastructure', type: 'WifiApSta'},
-        { id: 3, icon: 'assets/img/tgim/wifi1.png', text: 'Wifi Ad-hoc',  type: 'WifiAdhoc'}
+        { id: 0, icon: 'assets/img/channel/csma1.png', text: 'CSMA',         type: 'Csma'},
+        { id: 1, icon: 'assets/img/channel/ppp1.png',  text: 'PointToPoint', type: 'PointToPoint'},
+        { id: 2, icon: 'assets/img/channel/wifi1.png', text: 'Wifi Infrastructure', type: 'WifiApSta'},
+        { id: 3, icon: 'assets/img/channel/wifi2.png', text: 'Wifi Ad-hoc',  type: 'WifiAdhoc'}
       ],
-      assign_name_prefix: '__ch_default',
-      last_assign: 0
+      assign_name_prefix: '_ch',
     }
 
     this.handleClick = (e) => {
-      // TODO: add Channel icon to the NetCanvas (will be marge form NodeListComponent)
-      var name = this.state.assign_name_prefix + this.state.last_assign
-      this.state.last_assign++
       const type = this.state.items[e.id].type
-      this.props.handleAddChannel(name, type)
+      this.props.handleAddChannelAuto(this.state.assign_name_prefix, type)
     }
 
   }
@@ -75,26 +71,15 @@ export class NodeListComponent extends ListComponent {
       id: 'node-list-component',
       header: 'Node',
       items: [
-        {id: 0, type:'NODE',   icon: 'assets/img/Pc.png',          text: 'Basic' },
-        {id: 1, type:'SUBNET', icon: 'assets/img/icon/subnet.png', text: 'Subnet'     },
-        /*
-        {id: 2, type:'EMU',    icon: 'assets/img/Emu.png',         text: 'Emu(temp)'    },
-        {id: 3, type:'RT',     icon: 'assets/img/Router.png',      text: 'Router(temp)' },
-        {id: 4, type:'STA',    icon: 'assets/img/StationWifi.png', text: 'STA(temp)'    },
-        {id: 5, type:'TAP',    icon: 'assets/img/Tap.png',         text: 'TAP(temp)'    }
-        */
+        {id: 0, type:'NODE',   icon: 'assets/img/node/node.png',   text: 'Basic' },
+        {id: 1, type:'SUBNET', icon: 'assets/img/node/subnet.png', text: 'Subnet'},
       ],
-      assign_name_prefix: '__node_default',
-      last_assign: 0
+      assign_name_prefix: '_node',
     }
 
     this.handleClick = (e) => {
-      // FIXME: it necessary assign unique name to a node
-      //console.log(this.state.items[e.id].type)
-      const name = this.state.assign_name_prefix + this.state.last_assign
       const type = this.state.items[e.id].type
-      this.state.last_assign++
-      this.props.handleAdd(type, name)
+      this.props.handleAdd(type, this.state.assign_name_prefix, true)
     }
   }
 
@@ -127,16 +112,11 @@ export class ApplicationListComponent extends ListComponent {
       id: 'application-list-component',
       header: 'Application',
       items: items,
-      assign_name_prefix: '__app_default',
-      last_assign: 0
+      assign_name_prefix: '_app',
     }
 
     this.handleClick = (e) => {
-      // FIXME
-      console.log(e)
-      var name = this.state.assign_name_prefix + this.state.last_assign
-      this.state.last_assign++
-      this.props.handleAddApp(name, e.type )
+      this.props.handleAddAppAuto(this.state.assign_name_prefix, e.type)
     }
 
   }

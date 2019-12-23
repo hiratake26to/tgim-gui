@@ -1,21 +1,21 @@
 'use strict'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Image, Group} from 'react-konva'
 import {Provider} from 'react-redux'
+import NetIcon from './net-icon'
 
 export default class NetNode extends React.Component {
   constructor(prop) {
     super(prop)
     this.state = {
-      image: null,
       id: prop.id,
-      x: prop.x,
-      y: prop.y,
+      image: null,
     }
+    this.state.image = new window.Image(45, 45)
+    this.state.image.src = 'assets/img/node/node.png'
   }
 
-
+  // [TODO] ノードとサブネットの線描画の処理をまとめる
   line_list = []
   last_netifs = null
   interval_id = null
@@ -42,16 +42,6 @@ export default class NetNode extends React.Component {
   }
 
   componentDidMount() {
-    const image = new window.Image()
-    image.src = 'assets/img/Pc.png'
-    image.onload = () => {
-      this.setState({
-        image: image,
-        offsetX: image.width/2,
-        offsetY: image.height/2
-      })
-    }
-
     // line setter
     this.interval_id = setInterval( this.reline, 100 )
   }
@@ -61,39 +51,17 @@ export default class NetNode extends React.Component {
   }
 
   render() {
-    return (
-      <Image
-        image={this.state.image}
-        draggable={true}
-        x={this.state.x}
-        y={this.state.y}
-        offsetX={this.state.offsetX}
-        offsetY={this.state.offsetY}
-        dragBoundFunc={(pos) =>{
-          this.state.x = pos.x
-          this.state.y = pos.y
-          this.props.handleDragend(this.state.id, this.state.x, this.state.y)
-          return {
-              x: pos.x,
-              y: pos.y
-          }
-        }}
-        onClick={ () => 
-          {
-            this.props.showProps('NODE', this.state.id)
-            //this.reline();
-          }
-        }
-        onDragStart={(e) => {
-          //this.props.addLine(this.props.id+'~', {type: 'NODE', id: this.props.id}, {type: 'NODE', id: this.props.id})
-        }}
-        onDragend={(e) => {
-          //var x = e.evt.layerX
-          //var y = e.evt.layerY
-          //this.props.handleDragend(this.state.id, x, y)
-          //this.reline()
-        }}
-      />
-    )
+    const {isSelect} = this.props.mapPointToState({x: this.props.x, y: this.props.y})
+    return <NetIcon
+      x={this.props.x}
+      y={this.props.y}
+      select={isSelect}
+      
+      name={this.state.id}
+      image={this.state.image}
+      onClick={(pos, e) => {this.props.showProps('NODE', this.state.id)}}
+      onDragmove={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}
+      onDragend={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}
+    />
   }
 }

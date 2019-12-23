@@ -106,9 +106,9 @@ export default class NodePropsEditor extends BasePropsEditor {
 
     // when node name change, copy current node to new node, and delete current node.
     if (this.state.name != this.props.id) {
-      this.props.node
       this.props.copyNode(this.props.id, this.state.name)
       this.props.delNode(this.props.id)
+      this.props.showProps('NODE', this.state.name)
     }
   }
 

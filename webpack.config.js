@@ -4,6 +4,7 @@ const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 
 module.exports = [
   {
+    mode: 'development',
     target: "electron-main",
     entry: './src/index.js',
     output: {
@@ -21,6 +22,7 @@ module.exports = [
     }
   },
   {
+    mode: 'development',
     target: "electron-renderer",
     entry: {
       preload: './src/preload.js',

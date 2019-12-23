@@ -1,3 +1,4 @@
+/* vim:set foldmethod=marker: */
 'use strict'
 import {handleActions} from 'redux-actions'
 import * as Act from './action'
@@ -11,6 +12,12 @@ import {
   defaultLineProp,
   defaultAppProp
 } from './default-states'
+
+import {mixinGetHelper} from './helper'
+
+//////////////////////////////////////////////////
+// GUI Reducer
+// {{{
 
 export const guiReducer = handleActions({
   [Act.initAllState]: (state) => {
@@ -97,8 +104,26 @@ export const guiReducer = handleActions({
       guiReducer(state, Act.delLine(id))
     })
     return state
+  },
+
+  [Act.selectWithinRectangle]: (state, { payload: rectangle}) => {
+    return {
+      ...state,
+      selector: {
+        ...state.selector,
+        type: 'RECTANGLE',
+        value: rectangle,
+      }
+    }
   }
 }, null)
+
+// GUI Reducer
+// }}}
+
+//////////////////////////////////////////////////
+// Net Reducer
+// {{{
 
 export const netReducer = handleActions({
   [Act.initAllState]: (state) => {
@@ -124,6 +149,16 @@ export const netReducer = handleActions({
         }
       }
     }
+  },
+  [Act.addNodeAuto]: (state, { payload: { prefix }}) => {
+    const tmp_node_subnet = mixinGetHelper(Object.assign({}, state.node, state.subnet))
+
+    // getLastIdx return -1 if no node has prefix,
+    // therefor, first node id is 0 (= (-1) + 1)
+    const id = `${prefix}${tmp_node_subnet.getLastIdx(prefix)+1}`
+    
+    const next = netReducer(state, Act.addNode(id))
+    return next
   },
   [Act.delNode]: (state, { payload: { id }}) => {
     delete state.node[id]
@@ -225,6 +260,11 @@ export const netReducer = handleActions({
       }
     }
   },
+  [Act.addSubnetAuto]: (state, { payload: { prefix }}) => {
+    const tmp_node_subnet = mixinGetHelper(Object.assign({}, state.node, state.subnet))
+    const id = `${prefix}${tmp_node_subnet.getLastIdx(prefix)+1}`
+    return netReducer(state, Act.addSubnet(id))
+  },
   [Act.delSubnet]: (state, { payload: { id }}) => {
     delete state.subnet[id]
     return { 
@@ -315,6 +355,11 @@ export const netReducer = handleActions({
       }
     }
   },
+  [Act.addChannelAuto]: (state, { payload: { prefix, type }}) => {
+    const tmp_channel = mixinGetHelper(state.channel)
+    const id = `${prefix}${tmp_channel.getLastIdx(prefix)+1}`
+    return netReducer(state, Act.addChannel(id, type))
+  },
   [Act.delChannel]: (state, { payload: { id }}) => {
     delete state.channel[id]
     return {
@@ -375,12 +420,28 @@ export const netReducer = handleActions({
       }
     }
   },
+  [Act.addAppAuto]: (state, { payload: { prefix, type }}) => {
+    const tmp_app = mixinGetHelper(state.apps)
+    const id = `${prefix}${tmp_app.getLastIdx(prefix)+1}`
+    return netReducer(state, Act.addApp(id, type))
+  },
   [Act.delApp]: (state, { payload: { id } }) => {
     delete state.apps[id]
     return {
       ...state,
       apps: {
         ...state.apps
+      }
+    }
+  },
+  [Act.copyApp]: (state, { payload: { id, newid }}) => {
+    return {
+      ...state,
+      apps: {
+        ...state.apps,
+        [newid]: {
+          ...state.apps[id]
+        }
       }
     }
   },
@@ -397,3 +458,6 @@ export const netReducer = handleActions({
     }
   }
 }, null)
+
+// Net Reducer
+// }}}

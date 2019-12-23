@@ -1,20 +1,19 @@
 'use strict'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Image, Group} from 'react-konva'
 import {Provider} from 'react-redux'
+import NetIcon from './net-icon'
 
 export default class NetSubnet extends React.Component {
   constructor(prop) {
     super(prop)
     this.state = {
-      image: null,
       id: prop.id,
-      x: prop.x,
-      y: prop.y,
+      image: null,
     }
+    this.state.image = new window.Image(40, 40)
+    this.state.image.src = 'assets/img/node/subnet.png'
   }
-
 
   line_list = []
   last_netifs = null
@@ -42,16 +41,6 @@ export default class NetSubnet extends React.Component {
   }
 
   componentDidMount() {
-    const image = new window.Image()
-    image.src = 'assets/img/icon/subnet.png'
-    image.onload = () => {
-      this.setState({
-        image: image,
-        offsetX: image.width/2,
-        offsetY: image.height/2
-      })
-    }
-
     // line setter
     this.interval_id = setInterval( this.reline, 100 )
   }
@@ -61,39 +50,14 @@ export default class NetSubnet extends React.Component {
   }
 
   render() {
-    return (
-      <Image
-        image={this.state.image}
-        draggable={true}
-        x={this.state.x}
-        y={this.state.y}
-        offsetX={this.state.offsetX}
-        offsetY={this.state.offsetY}
-        dragBoundFunc={(pos) =>{
-          this.state.x = pos.x
-          this.state.y = pos.y
-          this.props.handleDragend(this.state.id, this.state.x, this.state.y)
-          return {
-              x: pos.x,
-              y: pos.y
-          }
-        }}
-        onClick={ () => 
-          {
-            this.props.showProps('SUBNET', this.state.id)
-            //this.reline();
-          }
-        }
-        onDragStart={(e) => {
-          //this.props.addLine(this.props.id+'~', {type: 'NODE', id: this.props.id}, {type: 'NODE', id: this.props.id})
-        }}
-        onDragend={(e) => {
-          //var x = e.evt.layerX
-          //var y = e.evt.layerY
-          //this.props.handleDragend(this.state.id, x, y)
-          //this.reline()
-        }}
-      />
-    )
+    return <NetIcon
+      x={this.props.x}
+      y={this.props.y}
+      name={this.state.id}
+      image={this.state.image}
+      onClick={() => this.props.showProps('SUBNET', this.state.id) }
+      onDragmove={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}
+      onDragend={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}
+    />
   }
 }
