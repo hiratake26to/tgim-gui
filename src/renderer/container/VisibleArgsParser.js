@@ -21,9 +21,13 @@ class ArgsParser extends React.Component {
       prop.setNetState(data)
     }
 
-    ipcRenderer.on('open', (event, arg) => {
+    ipcRenderer.on('open-project', (event, arg) => {
       //console.log(arg) // print path
-      this.onOpen(arg)
+      //this.onOpen(arg)
+      console.log(`ArgsParse open "${arg}"`)
+      this.props.initAllState()
+      this.props.setProjectPath(arg.path)
+      this.props.setNetState(arg.payload.netState)
     })
   }
   render() {

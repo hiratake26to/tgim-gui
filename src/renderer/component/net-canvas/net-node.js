@@ -4,15 +4,16 @@ import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import NetIcon from './net-icon'
 
+const icons = require.context('../../../../assets/img/node', false, /\.(jpe?g|png)$/)
+
 export default class NetNode extends React.Component {
   constructor(prop) {
     super(prop)
     this.state = {
       id: prop.id,
-      image: null,
+      image_url: icons('./node.png').default
     }
-    this.state.image = new window.Image(45, 45)
-    this.state.image.src = 'assets/img/node/node.png'
+    //this.state.image = new window.Image(45, 45)
   }
 
   // [TODO] ノードとサブネットの線描画の処理をまとめる
@@ -58,7 +59,7 @@ export default class NetNode extends React.Component {
       select={isSelect}
       
       name={this.state.id}
-      image={this.state.image}
+      image_url={this.state.image_url}
       onClick={(pos, e) => {this.props.showProps('NODE', this.state.id)}}
       onDragmove={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}
       onDragend={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}

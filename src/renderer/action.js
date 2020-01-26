@@ -1,9 +1,26 @@
 'use strict'
-import {createAction} from 'redux-actions'
+import {createAction, createActions} from 'redux-actions'
 
 // used when loaded data from file
 export const initAllState = createAction('INIT_All_STATE')
+export const registerCanvas = createAction('REGISTER_CANVAS', (canvas) => (canvas))
 export const setNetState = createAction('SET_NET_STATE', (newState) => (newState))
+export const setProjectPath = createAction('SET_PROJECT_PATH', (path) => (path))
+
+// ErrorMessage
+export const errorMessage = createActions({
+  SET: (type, error) => ({type: type, error: error}),
+  CLEAR: () => ({})
+})
+
+// Box
+export const addBox     = createAction('ADD_BOX',      (id, box_list, type)     => ({ id: id, box_list: box_list, type: type }))
+export const addBoxAuto = createAction('ADD_BOX_AUTO', (prefix, box_list, type) => ({ prefix: prefix, box_list: box_list, type: type }))
+export const delBox     = createAction('DEL_BOX',      (id)           => ({ id: id }))
+export const copyBox    = createAction('COPY_BOX',     (id, newid)    => ({ id: id, newid: newid }))
+export const moveBox    = createAction('MOVE_BOX',     (id, x, y)     => ({ id: id, point: [x,y] }))
+export const reconnectBoxPort = createAction('RECONNECT_BOX_PORT', (id, ports) => ({ id: id, ports: ports }) )
+export const saveBoxProp = createAction('SAVE_BOX_PROP', (id, prop) => ({id:id, prop:prop}))
 
 // Node
 export const addNode         = createAction('ADD_NODE',          (id)         => ({ id: id }))

@@ -3,10 +3,15 @@
 //
 'use strict'
 import { combineReducers, createStore } from 'redux'
-import { netReducer, guiReducer } from './reducer'
+import { projectReducer, errorMessageReducer, netReducer, guiReducer } from './reducer'
 import { initialState } from './default-states'
 
 export const store = createStore(
-  combineReducers({netState: netReducer, guiState: guiReducer}),
+  combineReducers({
+    projectState: projectReducer,
+    errorState: errorMessageReducer,
+    netState: netReducer,
+    guiState: guiReducer
+  }),
   initialState
 )

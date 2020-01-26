@@ -21,6 +21,7 @@ function limitPair(xy, range) {
 }
 
 export default class NetIcon extends React.Component {
+  // key list of event handler
   HDL_KEYS = ['onClick', 'onDragStart', 'onDragmove', 'onDragend']
   /*
   handler = {
@@ -34,16 +35,8 @@ export default class NetIcon extends React.Component {
   constructor(prop) {
     super(prop)
     this.state = {
-      offsetX: 0,
-      offsetY: 0,
       x: prop.x,
       y: prop.y,
-    }
-    this.props.image.onload = () => {
-      this.setState({
-        offsetX: this.props.image.width/2,
-        offsetY: this.props.image.height/2,
-      })
     }
     this.myRef = React.createRef()
     console.log('imageRef:', this.imageRef)
@@ -52,6 +45,27 @@ export default class NetIcon extends React.Component {
       .map( (key)=>({ [key]: (...args)=>this.props[key]({x:this.state.x,y:this.state.y}, ...args) }))
       .reduce( (acc,current)=>Object.assign(acc,current), {})
     console.log(this.handler)
+
+    this.handleLoadImage = () => {
+      // resizes from image max-width
+      const {width: org_w, height: org_h} = this.image
+      //var [width, height] = [45.0, 0.0]
+      var [width, height] = [40.0, 0.0]
+      height = width*(org_h/org_w)
+      this.image.width = width
+      this.image.height = height
+      this.setState({
+        image: this.image,
+        offsetX: this.image.width/2,
+        offsetY: this.image.height/2,
+      })
+
+      this.imageRef.getLayer().batchDraw()
+    }
+    this.image = new window.Image()
+    this.image.src = this.props.image_url
+    this.image.addEventListener('load', this.handleLoadImage)
+
   }
 
   updateBright(select) {
@@ -89,7 +103,7 @@ export default class NetIcon extends React.Component {
         <Text text={this.props.name} />
       </Label>
       <Image ref={this.setImageRef}
-        image={this.props.image}
+        image={this.state.image}
         draggable={true}
         filters={[Filters.Brighten]}
         brightness={0}

@@ -10,6 +10,7 @@ export default class NetNodes extends React.Component {
   }
 
   render() {
+    //console.log('Node debug', this.props.node)
     return (
       <Group>
         { Object.keys(this.props.node).map( (key) => {

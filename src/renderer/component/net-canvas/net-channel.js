@@ -3,11 +3,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import NetIcon from './net-icon'
 
+//NOTE. require.context is webpack function
+const icons = require.context('../../../../assets/img/channel', false, /\.(jpe?g|png)$/)
+
 var icon = {
-  'Csma':         'assets/img/channel/csma1.png',
-  'PointToPoint': 'assets/img/channel/ppp1.png',
-  'WifiApSta':    'assets/img/channel/wifi1.png',
-  'WifiAdhoc':    'assets/img/channel/wifi2.png',
+  'Csma':         icons('./csma1.png').default,
+  'PointToPoint': icons('./ppp1.png' ).default,
+  'WifiApSta':    icons('./wifi1.png').default,
+  'WifiAdhoc':    icons('./wifi2.png').default,
 }
 
 export default class NetChannel extends React.Component {
@@ -16,10 +19,9 @@ export default class NetChannel extends React.Component {
     this.state = {
       id: prop.id,
       type: prop.channel[prop.id].type, // Csma | PointToPoint | WifiApSta | WifiAdhoc
-      image: null,
+      image_url: icon[prop.channel[prop.id].type]
     }
-    this.state.image = new window.Image(40, 40)
-    this.state.image.src = icon[this.state.type]
+    //this.state.image = new window.Image(40, 40)
   }
 
   render() {
@@ -27,7 +29,7 @@ export default class NetChannel extends React.Component {
       x={this.props.x}
       y={this.props.y}
       name={this.state.id}
-      image={this.state.image}
+      image_url={this.state.image_url}
       onClick={() => this.props.showProps('CHANNEL', this.state.id)}
       onDragmove={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}
       onDragend={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}

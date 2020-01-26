@@ -10,6 +10,9 @@ export default class NetLine extends React.Component {
 
     this.getPoint = (obj) => {
       switch (obj.type) {
+        case 'BOX':
+          if ( !this.props.box[obj.id] ) return {x: 0, y: 0}
+          return this.props.box[obj.id].point
         case 'NODE':
           return this.props.node[obj.id].point
         case 'SUBNET':
@@ -22,10 +25,11 @@ export default class NetLine extends React.Component {
   }
 
   render() {
-    //console.log('NetLine: render')
     var fp = this.getPoint(this.props.first)
     var sp = this.getPoint(this.props.second)
     var points = [fp.x, fp.y, sp.x, sp.y]
+    //console.log('NetLine: render', fp, sp)
+
     return (
       <Line
         x={0}

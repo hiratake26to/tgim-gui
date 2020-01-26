@@ -3,9 +3,11 @@
 import {handleActions} from 'redux-actions'
 import * as Act from './action'
 import * as ModelLoader from '../model/loader'
+import { Map, fromJS } from 'immutable'
 import {
   defaultNetState,
   defaultGuiState,
+  defaultBoxProp,
   defaultNodeProp,
   defaultSubnetProp,
   defaultChannelProp,
@@ -14,6 +16,24 @@ import {
 } from './default-states'
 
 import {mixinGetHelper} from './helper'
+//////////////////////////////////////////////////
+// Error Message Reducer
+// {{{
+
+export const errorMessageReducer = handleActions({
+  [Act.errorMessage.set]: (state, { payload: {type: type, error: error}}) => {
+    return {
+      type: type,
+      error: error
+    }
+  },
+  [Act.errorMessage.clear]: (state, { payload: {}}) => {
+    return {}
+  }
+}, null)
+
+// Error Message Reducer
+// }}}
 
 //////////////////////////////////////////////////
 // GUI Reducer
@@ -21,7 +41,10 @@ import {mixinGetHelper} from './helper'
 
 export const guiReducer = handleActions({
   [Act.initAllState]: (state) => {
-    return defaultGuiState
+    return {...defaultGuiState, canvas: state.canvas}
+  },
+  [Act.registerCanvas]: (state, {payload: canvas}) => {
+    return {...state, canvas: canvas}
   },
 
   [Act.addLine]: (state, { payload: { id, first: f, second: s }}) => {
@@ -51,6 +74,7 @@ export const guiReducer = handleActions({
     return {
       ...state,
       editor: {
+        ...state.editor,
         visible: true,
         type: type,
         id: id
@@ -73,7 +97,16 @@ export const guiReducer = handleActions({
     }
   },
 
-  // ノードが消されるときに関連するライン情報も削除する
+  // When Node and Box deleted, delete relevant lines
+  [Act.delBox]: (state, { payload: { id }}) => {
+    // delete relevant line
+    fromJS(state.line)
+      .filter(v=> v.get('first').equals(fromJS({type:'BOX', id:id}))
+               || v.get('second').equals(fromJS({type:'BOX', id:id})) )
+      .keySeq()
+      .forEach(id=>guiReducer(state, Act.delLine(id)))
+    return state
+  },
   [Act.delNode]: (state, { payload: { id }}) => {
     let deleted = []
     Object.keys(state.line).forEach( (lkey) => {
@@ -138,6 +171,204 @@ export const netReducer = handleActions({
     }
   },
 
+  [Act.addBox]: (state, { payload: { id, box_list, type }}) => {
+    console.log('box_list',box_list,'type',type)
+    return {
+      ...state,
+      box: {
+        ...state.box,
+        [id]: {
+          //...state.box[id],
+          ...defaultBoxProp(box_list, type),
+        }
+      }
+    }
+  },
+  [Act.addBoxAuto]: (state, { payload: { prefix, box_list, type }}) => {
+    const tmp_box = mixinGetHelper(state.box)
+    const id = `${prefix}${tmp_box.getLastIdx(prefix)+1}`
+    return netReducer(state, Act.addBox(id, box_list, type))
+  },
+  [Act.delBox]: (state, { payload: { id }}) => {
+    // first, delete all connection at box[id]
+    var nextState = fromJS(state).toJS()
+    const newPorts = fromJS(state.box[id].ports)
+      .map(v=>{
+        if(typeof v==='string')
+          return v //no connection
+        if(v.get('rel')==='parent') {
+          const [to_box, to_port] = v.get('connect')
+          console.log('deb',nextState, to_box, to_port)
+          console.log('deb2', nextState.box[to_box].ports)
+          const newPorts2 = fromJS(nextState.box[to_box].ports)
+            .map(v=>{
+              if(typeof v!=='string' && v.get('name')===to_port)
+                return v.get('name')
+              else
+                return v
+            })
+            .toJS()
+          console.log('deb2', newPorts2)
+          nextState = netReducer(nextState, Act.reconnectBoxPort(to_box, newPorts2))
+          return v.get('name') //delete connection
+        }
+        if(v.get('rel')==='child')
+          return v.get('name') //delete connection
+        else
+          return v.get('name') //delete connection
+      })
+      .toJS()
+    nextState = netReducer(nextState, Act.reconnectBoxPort(id, newPorts))
+    console.log(nextState)
+
+    state = nextState
+    // delete box
+    delete state.box[id]
+    return { 
+      ...state,
+      box: {
+        ...state.box
+      }
+    }
+  },
+  [Act.copyBox]: (state, { payload: { id, newid }}) => {
+    return {
+      ...state,
+      box: {
+        ...state.box,
+        [newid]: {
+          ...state.box[id]
+        }
+      }
+    }
+  },
+  [Act.moveBox]: (state, { payload: { id, point: [x,y] }}) => {
+    return {
+      ...state,
+      box: {
+        ...state.box,
+        [id]: {
+          ...state.box[id],
+          point: {
+            x: x,
+            y: y
+          }
+        }
+      }
+    }
+  },
+  [Act.reconnectBoxPort]: (state, { payload: { id, ports }}) => {
+    var box = fromJS(state.box).toJS()
+
+    ///
+    // First, delete all ports of destination box relevant current box.
+    // After, connect new ports.
+    
+    // validate
+    const invalid = fromJS(ports)
+      .filter(Map.isMap)
+      .filter(p=>p.get('rel')==='child')
+      .flatMap(p=>{
+        const [to_box, to_port] = p.get('connect')
+        const to_box_ports = fromJS(box[to_box].ports)
+
+        if (!!box[to_box] == false) {
+          return ['port('+p.get('name')+') is not found in the destination box!']
+        }
+
+        const ports_state = to_box_ports
+          .map(x=>{
+            if(x===to_port)
+              return fromJS({type: 'available', value: x})
+            if(Map.isMap(x) && x.get('name')===to_port && x.get('connect').get(0)===id)
+              return fromJS({type: 'self_connected', value: x}) // due to already connected
+            if(Map.isMap(x) && x.get('name')===to_port)
+              return fromJS({type: 'connected', value: x}) // due to already connected
+            else
+              return fromJS({type: 'noexist', value: x})
+          })
+
+        console.log(ports_state)
+
+        const getSize = (type) => ports_state.filter(x=>x.get('type')===type).size
+        if (getSize('available') + getSize('self_connected') <= 0)
+        {
+          if (getSize('connected') > 0)
+            return ['destination box('+to_box+')\'s port('+p.get('name')+') is already connected!']
+          if (getSize('noexist') > 0)
+            return ['destination box('+to_box+')\'s port('+p.get('name')+') is not exist!']
+          else
+            return ['destination box('+to_box+')\'s port('+p.get('name')+') is invalid, inexpected error!']
+        }
+
+        return [] // pass
+      })
+
+    if (invalid.size > 0)
+    {
+      console.log('Act.reconnectBoxPort is failed', invalid.toJS())
+      return {...state}
+    }
+
+    // delete old port of box destination
+    box[id].ports.forEach(p=>{
+      if (p.rel == 'child') {
+        const [to_box, to_port] = p.connect
+        const to_box_ports = fromJS(box[to_box].ports)
+
+        // delete ports of the destination box
+        box[to_box].ports = to_box_ports.map(x=>{
+          const port_name = typeof x==='string'? x : x.get('name')
+          if (port_name===to_port) {
+            return port_name // overwrite with port name and delete
+          }
+          return x // keep
+        }).toJS()
+        console.log('reconnectBoxPort', box[to_box].ports)
+
+      }
+    })
+
+    // update old port to new of connection of box
+    ports.forEach(p=>{
+      if (p.rel == 'child') {
+        const [to_box, to_port] = p.connect
+        const to_box_ports = fromJS(box[to_box].ports)
+
+        // search destination ports of the box
+        if (to_box_ports.filter(x=>x===to_port).size <= 0) {
+          // not found 
+          console.log('Act.reconnectBoxPort', 'Warning! not found the port of box of destination')
+        }
+
+        // update ports of the destination box
+        box[to_box].ports = to_box_ports.map(x=>{
+          if (x===to_port) {
+            return {name: to_port, connect: [id, p.name], rel: 'parent'}
+          } else {
+            return x
+          }
+        }).toJS()
+
+      }
+    })
+
+    return {
+      ...state,
+      box: {
+        ...box,
+        [id]: {
+          ...state.box[id],
+          ports: ports 
+        }
+      }
+    }
+  },
+  [Act.saveBoxProp]: (state, { payload: { id, prop }}) => {
+    return fromJS(state)
+      .updateIn(['box',id], v=>v.merge(fromJS(prop)))
+      .toJS()
+  },
   [Act.addNode]: (state, { payload: { id }}) => {
     return {
       ...state,
@@ -460,4 +691,21 @@ export const netReducer = handleActions({
 }, null)
 
 // Net Reducer
+// }}}
+
+//////////////////////////////////////////////////
+// Project Reducer
+// {{{
+
+export const projectReducer = handleActions({
+  [Act.setProjectPath]: (state, { payload: path }) => {
+    console.log('called setProjectPath')
+    return {
+      ...state,
+      path: path
+    }
+  },
+}, null)
+ 
+// Project Reducer
 // }}}

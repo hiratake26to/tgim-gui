@@ -4,15 +4,16 @@ import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import NetIcon from './net-icon'
 
+const icons = require.context('../../../../assets/img/node', false, /\.(jpe?g|png)$/)
+
 export default class NetSubnet extends React.Component {
   constructor(prop) {
     super(prop)
     this.state = {
       id: prop.id,
-      image: null,
+      image_url: icons('./subnet.png').default
     }
-    this.state.image = new window.Image(40, 40)
-    this.state.image.src = 'assets/img/node/subnet.png'
+    //this.state.image = new window.Image(40, 40)
   }
 
   line_list = []
@@ -54,7 +55,7 @@ export default class NetSubnet extends React.Component {
       x={this.props.x}
       y={this.props.y}
       name={this.state.id}
-      image={this.state.image}
+      image_url={this.state.image_url}
       onClick={() => this.props.showProps('SUBNET', this.state.id) }
       onDragmove={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}
       onDragend={(pos, e) => {this.props.handleDragend(this.state.id, pos.x, pos.y)}}

@@ -1,3 +1,6 @@
-#!/bin/sh
-cd "$(dirname "$0")/../"
-npm start
+#!/bin/bash
+#cd "$(dirname "$0")/../dist/tgim-gui-linux-x64/tgim-gui"
+CWD=$(pwd)
+BIN="$(dirname "$0")/../dist"
+#${BIN}/../node_modules/.bin/electron ${BIN}/. $@
+cd ${BIN} && ../node_modules/.bin/electron . --workdir=${CWD} $@

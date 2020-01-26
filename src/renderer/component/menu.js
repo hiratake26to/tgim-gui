@@ -1,36 +1,40 @@
 'use strict'
 import React from 'react'
 import { Dropdown, Icon, Menu, Segment } from 'semantic-ui-react'
-import { remote } from 'electron'
+import { remote, ipcRenderer } from 'electron'
+import { Map, fromJS } from 'immutable'
 import * as fs from 'fs'
 import * as libpath from 'path'
 
 class AppMenu extends React.Component {
-  onNew = () => {
+  constructor(prop) {
+    super(prop)
+  }
+  newFile = () => {
     this.props.initAllState()
   }
 
-  onOpen = () => {
-    const path = remote.dialog.showOpenDialog( {
+  openFile = () => {
+    const [path] = remote.dialog.showOpenDialogSync( {
       filters: [
         { name: 'tgim-file(.json)', extensions: ['json'] }
       ]
     })
 
     if ( path ) {
-      console.log('open "' + path[0] + '"')
-      const data = JSON.parse( fs.readFileSync(path[0]) )
+      console.log('open "' + path + '"')
+      const data = JSON.parse( fs.readFileSync(path) )
       this.props.initAllState()
       this.props.setNetState(data)
-      console.log(`change working directory in "${libpath.dirname(path[0])}".`)
-      this.props.changeWorkDir(libpath.dirname(path[0]))
+      console.log(`change working directory in "${libpath.dirname(path)}".`)
+      this.props.changeWorkDir(libpath.dirname(path))
     } else {
       console.log('open cancel')
     }
   }
 
-  onSave = () => {
-    var path = remote.dialog.showSaveDialog( {
+  saveFile = () => {
+    var path = remote.dialog.showSaveDialogSync( {
       filters: [
         { name: 'tgim-file(.json)', extensions: ['json'] }
       ]
@@ -62,7 +66,7 @@ class AppMenu extends React.Component {
   }
 
   onGen = () => {
-    let save_dir = remote.dialog.showOpenDialog( {
+    let save_dir = remote.dialog.showOpenDialogSync( {
       properties: ['openDirectory']
     })
 
@@ -129,6 +133,11 @@ class AppMenu extends React.Component {
 
   }
 
+  onGen2 = () => {
+    const box = this.props.netState.box
+    console.log('menu generage box', box)
+  }
+
   onPack = () => {
     const { pack_path } = require('../../config.js')
 
@@ -154,20 +163,111 @@ class AppMenu extends React.Component {
 
   }
 
+  saveAsPicture = () => {
+    console.log('saveAsPicture')
+    console.log(this.props.guiState)
+    console.log(this.props.guiState.canvas)
+
+    const downloadURI = (uri, name) => {
+      const link = document.createElement("a");
+      link.download = name;
+      link.href = uri;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    const stageRef = this.props.guiState.canvas
+    const dataURL = stageRef.current.toDataURL({
+      mimeType: "image/png",
+      quality: 0,
+      pixelRatio: 2
+    })
+    downloadURI(dataURL,"canvas-screen-shot")
+  }
+
+  saveAsProject = ()=>{
+    ipcRenderer
+      .invoke('save-as-project', {netState: fromJS(this.props.netState).toJS()})
+      .then((result)=>{
+        console.log('saveAsProject Success!', result)
+        this.props.setProjectPath(result.path)
+      })
+  }
+  newProject = ()=>{
+    ipcRenderer
+      .invoke('new-project')
+      .then((result)=>{
+        console.log('newProject Success!', result)
+        this.props.initAllState()
+        this.props.setProjectPath(result.path)
+      })
+  }
+  openProject = ()=>{
+    ipcRenderer
+      .invoke('open-project')
+      .then((result)=>{
+        console.log('openProject Success!', result)
+        this.props.initAllState()
+        this.props.setNetState(result.payload.netState)
+        this.props.setProjectPath(result.path)
+      })
+  }
+  saveProject = ()=>{
+    ipcRenderer
+      .invoke('save-project', {netState: fromJS(this.props.netState).toJS()})
+      .then((result)=>{
+        console.log('saveProject Success!', result)
+        this.props.setProjectPath(result.path)
+      })
+  }
+  runProject = ()=>{
+    ipcRenderer
+      .invoke('run-project', {})
+      .then((result)=>{
+        console.log('runProject Success!', result)
+      })
+  }
+  closeProject = ()=>{
+    ipcRenderer
+      .invoke('close-project', {})
+      .then((result)=>{
+        console.log('closeProject Success!', result)
+        this.props.initAllState()
+        this.props.setProjectPath('')
+      })
+  }
+
   render() {
+    const isProjectOpen = this.props.projectState.path===''
     return (
       <div>
         <Menu attached='top'>
           <Dropdown item icon='wrench' simple>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={this.onNew}>New</Dropdown.Item>
-              <Dropdown.Item onClick={this.onOpen}>Open</Dropdown.Item>
-              <Dropdown.Item onClick={this.onSave}>Save</Dropdown.Item>
+              <Dropdown.Item onClick={this.newProject}>New Project</Dropdown.Item>
               <Dropdown.Divider />
+              <Dropdown.Item onClick={this.openProject}>Open Project</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item disabled={!isProjectOpen} onClick={this.saveAsProject}>Save As Project</Dropdown.Item>
+              <Dropdown.Item disabled={isProjectOpen} onClick={this.saveProject}>Save Project</Dropdown.Item>
+              <Dropdown.Item onClick={this.saveAsPicture}>Save as picture</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item disabled={isProjectOpen} onClick={this.runProject}>Build&Run Project</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item disabled={isProjectOpen} onClick={this.closeProject}>Close Project</Dropdown.Item>
+              {/*
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={this.newFile}>New</Dropdown.Item>
+              <Dropdown.Item onClick={this.openFile}>Open</Dropdown.Item>
+              <Dropdown.Item onClick={this.saveFile}>Save</Dropdown.Item>
+              */}
+              {/*
               <Dropdown.Header>Export</Dropdown.Header>
-              <Dropdown.Item onClick={this.onGen}>Generate ns3 code</Dropdown.Item>
+              <Dropdown.Item onClick={this.onGen2}>Generate ns3 code(dev-ver)</Dropdown.Item>
+              <Dropdown.Item onClick={this.onGen}>Generate ns3 code(old-ver)</Dropdown.Item>
               <Dropdown.Item onClick={this.onPack}>Package</Dropdown.Item>
-              <Dropdown.Item>Save as picture</Dropdown.Item>
+              */}
             </Dropdown.Menu>
           </Dropdown>
         </Menu>

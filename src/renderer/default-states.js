@@ -1,7 +1,12 @@
 'use strict'
 
+export const defaultProjectState = {
+  path: ""
+}
+
 export const defaultNetState = {
   name: 'initialNet',
+  box: {},
   node: {},
   subnet: {},
   channel: {},
@@ -15,6 +20,18 @@ export const defaultGuiState = {
   work_dir: "",
 }
 
+export function defaultBoxProp(box_list, name) {
+  console.log('de3bug',box_list, name)
+  return {
+    ...box_list[name],
+    point: { x: 100, y: 100 },
+    code: [`(this.Sdl()`
+      ,`.At(Sig("SimReady")).Aft()`
+      ,`  #.At(0).Do("Ping", {'dhost': dst.AsHost()})`
+      ,`.EndAft())`
+    ].join('\n')
+  }
+}
 export const defaultNodeProp = {
   point: { x: 100, y: 100 },
   netifs: []
@@ -57,5 +74,8 @@ export const initialState = {
   },
   guiState: {
     ...defaultGuiState
+  },
+  projectState: {
+    ...defaultProjectState
   }
 }

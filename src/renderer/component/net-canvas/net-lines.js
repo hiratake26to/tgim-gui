@@ -23,7 +23,11 @@ export default class NetLines extends React.Component {
               id     = {key}
               first  = {l.first}
               second = {l.second}
-              node={this.props.node} subnet={this.props.subnet} channel={this.props.channel} line={this.props.line}
+              box     = {this.props.box}
+              node    = {this.props.node}
+              subnet  = {this.props.subnet}
+              channel = {this.props.channel}
+              line    = {this.props.line}
             />
           )
         })}

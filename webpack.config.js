@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 
@@ -17,7 +18,9 @@ module.exports = [
     },
     module: {
       rules: [
-        { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' } 
+        { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' },
+        { test: /\.py$/, loader: 'file-loader', options: {outputPath: 'script'} },
+        { test: /\.(jpe?g|png|gif)$/, loader: 'file-loader', options: {outputPath: 'assets'} },
       ]
     }
   },
@@ -25,9 +28,7 @@ module.exports = [
     mode: 'development',
     target: "electron-renderer",
     entry: {
-      preload: './src/preload.js',
-      app: './src/renderer/app.js',
-      afterload: './src/afterload.js'
+      app: './src/renderer/app.js'
     },
     output: {
       path: path.join(__dirname, 'dist'),
@@ -36,29 +37,22 @@ module.exports = [
     devtool: 'inline-source-map',
     module: {
       rules: [
-        { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' }
+        { test: /\.js$/, exclude: /node_modules/, use: 'babel-loader' },
+        { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+        { test: /\.(jpe?g|png|gif)$/, loader: 'file-loader', options: {outputPath: 'assets'} },
+        { test: /\.(eot|svg|ttf|woff|woff2)$/,
+          loader: 'file-loader?name=semantic/dist/themes/default/assets/fonts/[name].[ext]' },
       ]
     },
     plugins: [
+      new webpack.ProvidePlugin({
+        jQuery: 'jquery'
+      }),
       // generate index.html that contain script to load [preload|app|afterload].bundle.js
       new HtmlWebpackPlugin({
-        chunks: ['preload', 'app'],
+        chunks: ['app'],
         template: './src/index-temp.html',
         filename: path.join(__dirname, 'dist/index.html')
-      }),
-      new HtmlWebpackTagsPlugin({
-        // require liblarys(css,js) to here
-        // those is will append to index.html, and will auto determine where is head or body
-        tags: [
-          'assets/default.css',
-          'assets/bootstrap/css/bootstrap.min.css',
-          'assets/bootstrap/css/bootstrap-theme.min.css',
-          'assets/bootstrap/js/bootstrap.min.js',
-          'assets/Semantic-UI-2.4/dist/semantic.css',
-          'assets/Semantic-UI-2.4/dist/semantic.js',
-          // afterload
-          'afterload.bundle.js'
-        ]
       })
     ]
   }

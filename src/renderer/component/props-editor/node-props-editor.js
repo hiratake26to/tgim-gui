@@ -55,7 +55,7 @@ class NetIfsForm extends Component {
     const content = netifs.map( (nic, idx) => {
       return (<NetIfaceForm id={idx} nic={nic} onChange={this.props.onChange} onDelete={this.props.onDelete}/>)
     });
-    console.log('NetIfsForm.content->', content);
+    //console.log('NetIfsForm.content->', content);
     return (
       <div>
         {content}

@@ -1,7 +1,15 @@
 'use strict'
 import React from 'react'
 import { List, Divider, Container, Message, Button, Checkbox, Form, Grid, Header, Icon, Image, Menu, Segment, Sidebar } from 'semantic-ui-react'
-import { Ask, NodePropsEditor, SubnetPropsEditor, ChannelPropsEditor, AppPropsEditor, Exception } from './props-editor/utils'
+import { 
+  Ask,
+  BoxPropsEditor,
+  NodePropsEditor, 
+  SubnetPropsEditor,
+  ChannelPropsEditor,
+  AppPropsEditor,
+  Exception 
+} from './props-editor/utils'
 
 class AskSwitchTarget extends React.Component {
   render() {
@@ -20,11 +28,21 @@ class PropsEditor extends React.Component {
   current = null
   focus = null
   ask = null
-  hasChange = false
+  titleSuffix = ''
+
+  constructor(prop) {
+    super(prop)
+
+    this.state = {
+      width: null,
+    }
+  }
 
   switchContent(visible, type, id) {
     this.current = this.focus
     const pr = (() => {switch( type ) {
+      case 'BOX': 
+        return this.props.netState.box[id]
       case 'NODE': 
         return this.props.netState.node[id]
       case 'SUBNET': 
@@ -38,29 +56,35 @@ class PropsEditor extends React.Component {
     }})()
 
     if ( !visible ) {
-      //
       //this.content = <div />
     } else if ( !pr ) {
       const m = ''+ type + ' ' + id + ' is not found';
-      //this.setState({content: <Exception msg={m}/>})
-      this.content = <Exception msg={m}/>
+      return <Exception msg={m}/>
+
     } else {
-      if (type == 'NODE') {
-        //this.setState( { content: <NodePropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} /> })
-        this.content = <NodePropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} />
+      if (type == 'BOX') {
+        return <BoxPropsEditor
+            handleParent={this} key={type+id} {...this.props} {...this.props.netState} id={id} 
+          />
+      } else if (type == 'NODE') {
+        return <NodePropsEditor
+            handleParent={this} key={type+id} {...this.props} {...this.props.netState} id={id}
+          />
       } else if (type == 'SUBNET') {
-        //this.setState( { content: <SubnetPropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} /> })
-        this.content = <SubnetPropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} />
+        return <SubnetPropsEditor
+            handleParent={this} key={type+id} {...this.props} {...this.props.netState} id={id}
+          />
       } else if (type == 'CHANNEL') {
-        //this.setState( { content: <ChannelPropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} /> })
-        this.content = <ChannelPropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} />
+        return <ChannelPropsEditor
+            handleParent={this} key={type+id} {...this.props} {...this.props.netState} id={id}
+          />
       } else if (type == 'APP') {
-        //this.setState( { content: <ChannelPropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} /> })
-        this.content = <AppPropsEditor key={type+id} {...this.props} {...this.props.netState} id={id} />
+        return <AppPropsEditor
+            handleParent={this} key={type+id} {...this.props} {...this.props.netState} id={id}
+          />
       } else {
         const m = ''+ type + ' is invalided type';
-        //this.setState( { content: <Exception msg={m}/>} )
-        this.content = <Exception msg={m}/>
+        return <Exception msg={m}/>
       }
     }
   }
@@ -73,14 +97,18 @@ class PropsEditor extends React.Component {
     const jc = JSON.parse(this.current)
     this.props.showProps(jc.type, jc.id)
   }
+  handleEditState = ({isSaved}) => {
+    if (isSaved) {
+      this.titleSuffix = ''
+    } else {
+      this.titleSuffix = '●'
+    }
+  }
 
   render() {
     const { visible, type, id } = this.props.guiState.editor
     this.focus = JSON.stringify({type: type, id: id})
-
-    if ( !this.hasChange ) {
-      this.switchContent(visible, type, id)
-    }
+    this.content = this.switchContent(visible, type, id)
 
     return (
       <div className='props-editor'>
@@ -89,9 +117,10 @@ class PropsEditor extends React.Component {
           animation='overlay'
           direction='right'
           visible={visible}
+          width={this.state.width}
         > 
           <div>
-            Props editor
+            Props editor {this.titleSuffix}
             <Icon link name='close' onClick={this.hideVisibility} />
           </div>
 
