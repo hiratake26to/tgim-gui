@@ -1,3 +1,7 @@
+// Copyright (c) 2019 hiratake26to. All rights reserved.
+// 
+// This work is licensed under the terms of the MIT license.  
+// For a copy, see <https://opensource.org/licenses/MIT>.
 'use strict'
 import React from 'react'
 import { Dropdown, Icon, Menu, Segment } from 'semantic-ui-react'

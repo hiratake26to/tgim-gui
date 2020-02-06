@@ -1,3 +1,8 @@
+# Copyright (c) 2019 hiratake26to. All rights reserved.
+# 
+# This work is licensed under the terms of the MIT license.  
+# For a copy, see <https://opensource.org/licenses/MIT>.
+
 import tgimbox
 import re
 import json
