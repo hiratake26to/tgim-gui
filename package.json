@@ -25,7 +25,7 @@
     "bootstrap": "^4.4.1",
     "chai": "4.2.0",
     "css-loader": "^3.4.2",
-    "d3": "5.15.0",
+    "d3": "7.6.1",
     "electron": "7.1.9",
     "electron-packager": "14.2.0",
     "file-loader": "^5.0.2",
